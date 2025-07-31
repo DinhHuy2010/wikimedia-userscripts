@@ -174,5 +174,6 @@
     if (NS >= 0 && !IS_IN_WIKIDATA_DATA_NAMESPACE) {
       mediawiki.loader.using(["mediawiki.api"]).then(setDisamLabelIfNeeded);
     }
+    console.log(`[${SCRIPTNAME}]: Userscripts loaded successfully.`);
   })(jQuery, mediaWiki);
 })();

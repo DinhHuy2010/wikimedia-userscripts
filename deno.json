@@ -1,7 +1,7 @@
 {
   "tasks": {
     "build": "deno run --allow-read --allow-run --allow-env scripts/build.ts",
-    "publish": "deno run --allow-read --allow-env=\"WIKIMEDIA_*\" --env-file --allow-net scripts/publish.ts"
+    "publish": "deno run --allow-read=wikimedia-userscript-global.esbuilt.js --allow-env --env-file --allow-net --allow-sys scripts/publish.ts"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
