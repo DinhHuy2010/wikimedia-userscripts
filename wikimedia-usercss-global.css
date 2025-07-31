@@ -1,0 +1,46 @@
+/* Hide beta features
+
+#pt-betafeatures, #pt-betafeatures-sticky-header {
+    display: none;
+}
+
+/* Code syntax hightlighting */
+
+pre, code, .mw-highlight * {
+    font-family: "Cascadia Mono", sans-serif;
+    font-size: inherit;
+}
+
+/* Bold */
+
+b, strong {
+    font-family: "Cascadia Mono", sans-serif;
+    font-size: inherit;
+    font-weight: 700;
+}
+
+/* Italics */
+
+i {
+    font-family: "Cascadia Mono", sans-serif;
+    font-style: italic;
+    font-size: inherit;
+}
+
+/* Main contents */
+
+.mw-page-container *, .mw-header * {
+    font-family: "Cascadia Mono", sans-serif;
+}
+
+/* Headings */
+
+.mw-body h1, .mw-body h2, .mw-body h3, .mw-body h4, .mw-body h5, .mw-body h6 {
+    font-family: "Cascadia Mono", sans-serif;
+}
+
+/* Vector 2022 sticky header */
+
+.vector-header-container * {
+    font-family: "Cascadia Mono", sans-serif;
+}
