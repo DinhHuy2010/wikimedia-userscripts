@@ -3,7 +3,10 @@
 // Copyright (c) 2025-present DinhHuy2010
 // License: CC-BY-4.0
 
-import type { ApiParseParams, ApiQueryPagePropsParams } from "types-mediawiki/api_params";
+import type {
+    ApiParseParams,
+    ApiQueryPagePropsParams,
+} from "types-mediawiki/api_params";
 
 type MediaWikiType = typeof mediaWiki;
 // {<string>: {script: <string> | <function>, wiki: <wiki>}}
@@ -32,10 +35,10 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         "formatversion": "2",
         "ppprop": "disambiguation",
     };
-    const NS = mw.config.get("wgNamespaceNumber");
+    const NS = mediawiki.config.get("wgNamespaceNumber");
     const WIKIBASE_DATA_NS = [640, 120, 146, 0];
     const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) &&
-        mw.config.get("wgDBname") === "wikidatawiki";
+        mediawiki.config.get("wgDBname") === "wikidatawiki";
     const IS_IN_SPECIAL_NAMESPACE = NS < 0;
     // "*" = All projects
     // "<wgDBname>" = Specific project
@@ -78,7 +81,15 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         "Ultraviolet": {
             script: "w:en:User:10nm/beta.js",
             wiki: ["enwiki"],
-        }
+        },
+        "CiteHighlighter": {
+            script: "w:en:User:Novem Linguae/Scripts/CiteHighlighter.js",
+            wiki: ["enwiki"],
+        },
+        "sectionLinks.js": {
+            script: "w:en:User:Hilst/Scripts/sectionLinks.js",
+            wiki: ["enwiki"],
+        },
     };
     const SCRIPTNAME = "User:DinhHuy2010/global.js";
 
@@ -113,9 +124,9 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         fl.href = CASCADIA_MONO_FONT_URL.toString();
         jq("head").append(fl);
     }
-    
+
     function renderWikitext(wt: string, opts?: ApiParseParams) {
-        const api = new mw.Api();
+        const api = new mediawiki.Api();
         const html = api.parse(wt, opts);
         return html;
     }
@@ -136,7 +147,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
             on = `on ${script.wiki.join(", ")}`;
         }
         if (
-            script.wiki.includes(mw.config.get("wgDBname")) ||
+            script.wiki.includes(mediawiki.config.get("wgDBname")) ||
             script.wiki === "*" || script.wiki.includes("*")
         ) {
             // If the current wiki is in the list or the script is for all wikis
@@ -146,7 +157,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
             // If the script is not for the current wiki, skip execution
             console.warn(
                 `[${SCRIPTNAME}]: Skipping ${name} as it is not applicable to ${
-                    mw.config.get("wgDBname")
+                    mediawiki.config.get("wgDBname")
                 }.`,
             );
         }
@@ -166,17 +177,22 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         console.log(
             `[${SCRIPTNAME}]: Loading English Wikipedia specific userscripts...`,
         );
-        const WIKITEXT = "From [[Wikipedia]], the free encyclopedia that anyone can edit";
+        const WIKITEXT =
+            "From [[Wikipedia]], the free encyclopedia that anyone can edit";
 
         // Change some text on the English Wikipedia
         jq("#ca-talk a").text("Discussion");
-        renderWikitext(WIKITEXT).then(
-            (html) => jq("#siteSub").html(html),
-        ).catch((err) => {
-            console.error(`[${SCRIPTNAME}]: Error rendering wikitext:`, err);
+        mediawiki.loader.using(["mediawiki.api"], () => {
+            renderWikitext(WIKITEXT).then((html) => jq("#siteSub").html(html))
+                .catch((err) => {
+                    console.error(
+                        `[${SCRIPTNAME}]: Error rendering wikitext:`,
+                        err,
+                    );
+                });
         });
         jq(".vector-main-menu-action-opt-out").hide();
-        if (mw.config.get("wgNamespaceNumber") === 6) {
+        if (mediawiki.config.get("wgNamespaceNumber") === 6) {
             jq("#ca-view-foreign a").text("View on Wikimedia Commons");
             jq("#ca-fileExporter a").text("Transfer to Wikimedia Commons");
         }
@@ -188,10 +204,10 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
     function setDisamLabelIfNeeded() {
         const query = structuredClone(DISAMBIGUATION_PAGE_API_QUERY);
         const contentNS = toContentNamespace(NS);
-        const api = new mw.Api();
-        query.titles = `${mw.config.get("wgFormattedNamespaces")[contentNS]}:${
-            mw.config.get("wgTitle")
-        }`;
+        const api = new mediawiki.Api();
+        query.titles = `${
+            mediawiki.config.get("wgFormattedNamespaces")[contentNS]
+        }:${mediawiki.config.get("wgTitle")}`;
         api.get(query).then((data) => {
             const isDisambig =
                 data.query.pages[0].pageprops.disambiguation === "";
@@ -211,7 +227,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
     }
     if (
         !IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE &&
-        !mw.config.get("wgIsMainPage")
+        !mediawiki.config.get("wgIsMainPage")
     ) {
         // Force #siteSub to show on all pages except:
         //      Special pages

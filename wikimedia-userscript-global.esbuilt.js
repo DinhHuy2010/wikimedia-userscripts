@@ -23,6 +23,7 @@
     const NS = mw.config.get("wgNamespaceNumber");
     const WIKIBASE_DATA_NS = [640, 120, 146, 0];
     const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) && mw.config.get("wgDBname") === "wikidatawiki";
+    const IS_IN_SPECIAL_NAMESPACE = NS < 0;
     const USERSCRIPTS = {
       "XTools": { script: "mw:XTools/ArticleInfo.js", wiki: "*" },
       // [[mw:XTools]]
@@ -64,6 +65,10 @@
       "User:Lockal/EditSum.js": {
         script: "d:User:Lockal/EditSum.js",
         wiki: ["wikidatawiki"]
+      },
+      "Ultraviolet": {
+        script: "w:en:User:10nm/beta.js",
+        wiki: ["enwiki"]
       }
     };
     const SCRIPTNAME = "User:DinhHuy2010/global.js";
@@ -91,6 +96,11 @@
       fl.rel = "stylesheet";
       fl.href = CASCADIA_MONO_FONT_URL.toString();
       jq("head").append(fl);
+    }
+    function renderWikitext(wt, opts) {
+      const api = new mw.Api();
+      const html = api.parse(wt, opts);
+      return html;
     }
     function loadUserScript(name, script) {
       function execute() {
@@ -128,10 +138,13 @@
       console.log(
         `[${SCRIPTNAME}]: Loading English Wikipedia specific userscripts...`
       );
+      const WIKITEXT = "From [[Wikipedia]], the free encyclopedia that anyone can edit";
       jq("#ca-talk a").text("Discussion");
-      jq("#siteSub").text(
-        "From Wikipedia, the free encyclopedia that anyone can edit"
-      );
+      renderWikitext(WIKITEXT).then(
+        (html) => jq("#siteSub").html(html)
+      ).catch((err) => {
+        console.error(`[${SCRIPTNAME}]: Error rendering wikitext:`, err);
+      });
       jq(".vector-main-menu-action-opt-out").hide();
       if (mw.config.get("wgNamespaceNumber") === 6) {
         jq("#ca-view-foreign a").text("View on Wikimedia Commons");
@@ -140,7 +153,7 @@
     }
     function setDisamLabel() {
       console.log(`[${SCRIPTNAME}]: Setting disambiguation label...`);
-      jq("#ca-nstab-main a").text("Disambiguation page");
+      jq("li[id^='ca-nstab'] > a").text("Disambiguation page");
     }
     function setDisamLabelIfNeeded() {
       const query = structuredClone(DISAMBIGUATION_PAGE_API_QUERY);
@@ -160,6 +173,9 @@
     }
     if (NS >= 0 && !IS_IN_WIKIDATA_DATA_NAMESPACE) {
       mediawiki.loader.using(["mediawiki.api"]).then(setDisamLabelIfNeeded);
+    }
+    if (!IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE && !mw.config.get("wgIsMainPage")) {
+      jq("#siteSub").show();
     }
     console.log(`[${SCRIPTNAME}]: Userscripts loaded successfully.`);
   })(jQuery, mediaWiki);
