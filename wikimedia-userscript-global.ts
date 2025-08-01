@@ -183,7 +183,9 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         // Change some text on the English Wikipedia
         jq("#ca-talk a").text("Discussion");
         mediawiki.loader.using(["mediawiki.api"], () => {
-            renderWikitext(WIKITEXT).then((html) => jq("#siteSub").html(html))
+            renderWikitext(WIKITEXT, {
+                title: mediawiki.config.get("wgPageName"),
+            }).then((html) => jq("#siteSub").html(html))
                 .catch((err) => {
                     console.error(
                         `[${SCRIPTNAME}]: Error rendering wikitext:`,

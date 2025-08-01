@@ -20,9 +20,9 @@
       "formatversion": "2",
       "ppprop": "disambiguation"
     };
-    const NS = mw.config.get("wgNamespaceNumber");
+    const NS = mediawiki.config.get("wgNamespaceNumber");
     const WIKIBASE_DATA_NS = [640, 120, 146, 0];
-    const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) && mw.config.get("wgDBname") === "wikidatawiki";
+    const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) && mediawiki.config.get("wgDBname") === "wikidatawiki";
     const IS_IN_SPECIAL_NAMESPACE = NS < 0;
     const USERSCRIPTS = {
       "XTools": { script: "mw:XTools/ArticleInfo.js", wiki: "*" },
@@ -69,6 +69,14 @@
       "Ultraviolet": {
         script: "w:en:User:10nm/beta.js",
         wiki: ["enwiki"]
+      },
+      "CiteHighlighter": {
+        script: "w:en:User:Novem Linguae/Scripts/CiteHighlighter.js",
+        wiki: ["enwiki"]
+      },
+      "sectionLinks.js": {
+        script: "w:en:User:Hilst/Scripts/sectionLinks.js",
+        wiki: ["enwiki"]
       }
     };
     const SCRIPTNAME = "User:DinhHuy2010/global.js";
@@ -98,7 +106,7 @@
       jq("head").append(fl);
     }
     function renderWikitext(wt, opts) {
-      const api = new mw.Api();
+      const api = new mediawiki.Api();
       const html = api.parse(wt, opts);
       return html;
     }
@@ -116,12 +124,12 @@
       } else {
         on = `on ${script.wiki.join(", ")}`;
       }
-      if (script.wiki.includes(mw.config.get("wgDBname")) || script.wiki === "*" || script.wiki.includes("*")) {
+      if (script.wiki.includes(mediawiki.config.get("wgDBname")) || script.wiki === "*" || script.wiki.includes("*")) {
         console.log(`[${SCRIPTNAME}]: Loading userscript ${on}: ${name}`);
         execute();
       } else {
         console.warn(
-          `[${SCRIPTNAME}]: Skipping ${name} as it is not applicable to ${mw.config.get("wgDBname")}.`
+          `[${SCRIPTNAME}]: Skipping ${name} as it is not applicable to ${mediawiki.config.get("wgDBname")}.`
         );
       }
     }
@@ -140,13 +148,16 @@
       );
       const WIKITEXT = "From [[Wikipedia]], the free encyclopedia that anyone can edit";
       jq("#ca-talk a").text("Discussion");
-      renderWikitext(WIKITEXT).then(
-        (html) => jq("#siteSub").html(html)
-      ).catch((err) => {
-        console.error(`[${SCRIPTNAME}]: Error rendering wikitext:`, err);
+      mediawiki.loader.using(["mediawiki.api"], () => {
+        renderWikitext(WIKITEXT).then((html) => jq("#siteSub").html(html)).catch((err) => {
+          console.error(
+            `[${SCRIPTNAME}]: Error rendering wikitext:`,
+            err
+          );
+        });
       });
       jq(".vector-main-menu-action-opt-out").hide();
-      if (mw.config.get("wgNamespaceNumber") === 6) {
+      if (mediawiki.config.get("wgNamespaceNumber") === 6) {
         jq("#ca-view-foreign a").text("View on Wikimedia Commons");
         jq("#ca-fileExporter a").text("Transfer to Wikimedia Commons");
       }
@@ -158,8 +169,8 @@
     function setDisamLabelIfNeeded() {
       const query = structuredClone(DISAMBIGUATION_PAGE_API_QUERY);
       const contentNS = toContentNamespace(NS);
-      const api = new mw.Api();
-      query.titles = `${mw.config.get("wgFormattedNamespaces")[contentNS]}:${mw.config.get("wgTitle")}`;
+      const api = new mediawiki.Api();
+      query.titles = `${mediawiki.config.get("wgFormattedNamespaces")[contentNS]}:${mediawiki.config.get("wgTitle")}`;
       api.get(query).then((data) => {
         const isDisambig = data.query.pages[0].pageprops.disambiguation === "";
         if (isDisambig) {
@@ -174,7 +185,7 @@
     if (NS >= 0 && !IS_IN_WIKIDATA_DATA_NAMESPACE) {
       mediawiki.loader.using(["mediawiki.api"]).then(setDisamLabelIfNeeded);
     }
-    if (!IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE && !mw.config.get("wgIsMainPage")) {
+    if (!IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE && !mediawiki.config.get("wgIsMainPage")) {
       jq("#siteSub").show();
     }
     console.log(`[${SCRIPTNAME}]: Userscripts loaded successfully.`);
