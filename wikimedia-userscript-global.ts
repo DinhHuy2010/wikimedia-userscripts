@@ -3,7 +3,7 @@
 // Copyright (c) 2025-present DinhHuy2010
 // License: CC-BY-4.0
 
-import type { ApiQueryPagePropsParams } from "types-mediawiki/api_params";
+import type { ApiParseParams, ApiQueryPagePropsParams } from "types-mediawiki/api_params";
 
 type MediaWikiType = typeof mediaWiki;
 // {<string>: {script: <string> | <function>, wiki: <wiki>}}
@@ -36,6 +36,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
     const WIKIBASE_DATA_NS = [640, 120, 146, 0];
     const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) &&
         mw.config.get("wgDBname") === "wikidatawiki";
+    const IS_IN_SPECIAL_NAMESPACE = NS < 0;
     // "*" = All projects
     // "<wgDBname>" = Specific project
     const USERSCRIPTS: UserScriptsRecord = {
@@ -74,6 +75,10 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
             script: "d:User:Lockal/EditSum.js",
             wiki: ["wikidatawiki"],
         },
+        "Ultraviolet": {
+            script: "w:en:User:10nm/beta.js",
+            wiki: ["enwiki"],
+        }
     };
     const SCRIPTNAME = "User:DinhHuy2010/global.js";
 
@@ -107,6 +112,12 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         fl.rel = "stylesheet";
         fl.href = CASCADIA_MONO_FONT_URL.toString();
         jq("head").append(fl);
+    }
+    
+    function renderWikitext(wt: string, opts?: ApiParseParams) {
+        const api = new mw.Api();
+        const html = api.parse(wt, opts);
+        return html;
     }
 
     function loadUserScript(name: string, script: UserScriptRecord): void {
@@ -155,12 +166,15 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         console.log(
             `[${SCRIPTNAME}]: Loading English Wikipedia specific userscripts...`,
         );
+        const WIKITEXT = "From [[Wikipedia]], the free encyclopedia that anyone can edit";
 
         // Change some text on the English Wikipedia
         jq("#ca-talk a").text("Discussion");
-        jq("#siteSub").text(
-            "From Wikipedia, the free encyclopedia that anyone can edit",
-        );
+        renderWikitext(WIKITEXT).then(
+            (html) => jq("#siteSub").html(html),
+        ).catch((err) => {
+            console.error(`[${SCRIPTNAME}]: Error rendering wikitext:`, err);
+        });
         jq(".vector-main-menu-action-opt-out").hide();
         if (mw.config.get("wgNamespaceNumber") === 6) {
             jq("#ca-view-foreign a").text("View on Wikimedia Commons");
@@ -169,7 +183,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
     }
     function setDisamLabel() {
         console.log(`[${SCRIPTNAME}]: Setting disambiguation label...`);
-        jq("#ca-nstab-main a").text("Disambiguation page");
+        jq("li[id^='ca-nstab'] > a").text("Disambiguation page");
     }
     function setDisamLabelIfNeeded() {
         const query = structuredClone(DISAMBIGUATION_PAGE_API_QUERY);
@@ -194,6 +208,16 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
 
     if (NS >= 0 && !IS_IN_WIKIDATA_DATA_NAMESPACE) {
         mediawiki.loader.using(["mediawiki.api"]).then(setDisamLabelIfNeeded);
+    }
+    if (
+        !IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE &&
+        !mw.config.get("wgIsMainPage")
+    ) {
+        // Force #siteSub to show on all pages except:
+        //      Special pages
+        //      Wikidata data namespace
+        //      Main page
+        jq("#siteSub").show();
     }
     console.log(`[${SCRIPTNAME}]: Userscripts loaded successfully.`);
 })(jQuery, mediaWiki);
