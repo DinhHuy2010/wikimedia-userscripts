@@ -54,18 +54,6 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
             script: "m:User:Xiplus/TwinkleGlobal/load.js",
             wiki: "*",
         }, // [[m:User:Xiplus/TwinkleGlobal]]
-        "Shortdesc-helper": {
-            script: () => {
-                mediawiki.loader.getScript(
-                    "https://en.wikipedia.org/w/load.php?modules=ext.gadget.libSettings",
-                ).then(function () {
-                    mediawiki.loader.load(
-                        "https://en.wikipedia.org/w/load.php?modules=ext.gadget.Shortdesc-helper",
-                    );
-                });
-            },
-            wiki: ["enwiki"],
-        }, // [[w:en:Wikipedia:Shortdesc_helper]]
         "exlinks": {
             script: "w:en:MediaWiki:Gadget-exlinks.js",
             wiki: ["enwiki"],
@@ -85,7 +73,7 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         "User:Lockal/EditSum.js": {
             script: "d:User:Lockal/EditSum.js",
             wiki: ["wikidatawiki"],
-        }
+        },
     };
     const SCRIPTNAME = "User:DinhHuy2010/global.js";
 
@@ -136,13 +124,12 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         } else {
             on = `on ${script.wiki.join(", ")}`;
         }
-
-        console.log(`[${SCRIPTNAME}]: Loading userscript ${on}: ${name}`);
         if (
             script.wiki.includes(mw.config.get("wgDBname")) ||
             script.wiki === "*" || script.wiki.includes("*")
         ) {
             // If the current wiki is in the list or the script is for all wikis
+            console.log(`[${SCRIPTNAME}]: Loading userscript ${on}: ${name}`);
             execute();
         } else {
             // If the script is not for the current wiki, skip execution
