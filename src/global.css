@@ -33,7 +33,7 @@ i {
 /* Main contents */
 
 .mw-page-container *, .mw-header * {
-    font-family: "Cascadia Mono", sans-serif;
+    font-family: "Cascadia Mono" !important;
 }
 
 /* Headings */
