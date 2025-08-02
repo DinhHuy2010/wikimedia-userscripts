@@ -14,7 +14,7 @@ function forceShowTagline(): void {
     if (mw.config.get("wgIsMainPage") === true) {
         return;
     }
-    if (DATABASE_NAME === "metawiki" && mw.config.get("wgPageName") !== "Main_Page") {
+    if (DATABASE_NAME === "metawiki" && mw.config.get("wgPageName") === "Main_Page") {
         return;
     }
     $("#siteSub").show();
