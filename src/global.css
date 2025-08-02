@@ -58,3 +58,8 @@ i {
 .mwe-popups {
     font-family: "Cascadia Mono" !important;
 }
+
+/* Maybe <body>? */
+body * {
+    font-family: "Cascadia Mono", sans-serif;
+}
