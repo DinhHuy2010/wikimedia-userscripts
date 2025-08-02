@@ -26,7 +26,7 @@ function forceShowTagline(): void {
 }
 
 function hideOptOutMenuOption() {
-    if (VECTOR_SKINS.includes(SKIN)) {
+    if (!VECTOR_SKINS.includes(SKIN)) {
         return;
     }
     $(".vector-main-menu-action-opt-out").hide();
