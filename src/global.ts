@@ -1,22 +1,19 @@
-// User:DinhHuy2010/global.js
-// This script is loaded on all Wikimedia projects.
-// Copyright (c) 2025-present DinhHuy2010
-// License: CC-BY-4.0
+/**
+ * @description This is main entry point for User:DinhHuy2010/global.js
+ * @see https://www.mediawiki.org/wiki/Help:Extension:GlobalCssJs
+ * @author DinhHuy2010
+ * @license "CC-BY-4.0 OR MIT"
+ */
+
+/* Any JavaScript added to this page will be loaded on all wikis where you have an account (see [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:GlobalCssJs documentation]). */
 
 import type {
     ApiParseParams,
     ApiQueryPagePropsParams,
-} from "types-mediawiki/api_params";
-
-type MediaWikiType = typeof mediaWiki;
-// {<string>: {script: <string> | <function>, wiki: <wiki>}}
-// If string, use importScript(<string>);
-// Else, execute the function directly.
-type UserScriptRecord = {
-    script: string | (() => void);
-    wiki: string[] | "*";
-};
-type UserScriptsRecord = Record<string, UserScriptRecord>;
+    MediaWikiType,
+    UserScriptRecord,
+    UserScriptsRecord,
+} from "./modules/types.ts";
 
 ((jq: JQueryStatic, mediawiki: MediaWikiType) => {
     "use strict";
@@ -177,22 +174,6 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         console.log(
             `[${SCRIPTNAME}]: Loading English Wikipedia specific userscripts...`,
         );
-        const WIKITEXT =
-            "From [[Wikipedia]], the free encyclopedia that anyone can edit";
-
-        // Change some text on the English Wikipedia
-        jq("#ca-talk a").text("Discussion");
-        mediawiki.loader.using(["mediawiki.api"], () => {
-            renderWikitext(WIKITEXT, {
-                title: mediawiki.config.get("wgPageName"),
-            }).then((html) => jq("#siteSub").html(html))
-                .catch((err) => {
-                    console.error(
-                        `[${SCRIPTNAME}]: Error rendering wikitext:`,
-                        err,
-                    );
-                });
-        });
         jq(".vector-main-menu-action-opt-out").hide();
         if (mediawiki.config.get("wgNamespaceNumber") === 6) {
             jq("#ca-view-foreign a").text("View on Wikimedia Commons");
@@ -219,8 +200,27 @@ type UserScriptsRecord = Record<string, UserScriptRecord>;
         });
     }
 
+    function changesiteSub(): void {
+        const WIKITEXT = "{{User:DinhHuy2010/siteSub}}";
+
+        // Change some text on the English Wikipedia
+        jq("#ca-talk a").text("Discussion");
+        mediawiki.loader.using(["mediawiki.api"], () => {
+            renderWikitext(WIKITEXT, {
+                title: mediawiki.config.get("wgPageName"),
+            }).then((html) => jq("#siteSub").html(html))
+                .catch((err) => {
+                    console.error(
+                        `[${SCRIPTNAME}]: Error rendering wikitext:`,
+                        err,
+                    );
+                });
+        });
+    }
+
     loadOnGlobal();
     if (mediawiki.config.get("wgDBname") === "enwiki") {
+        mw.hook("wikipage.content").add(changesiteSub);
         loadOnEnglishWikipedia();
     }
 

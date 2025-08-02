@@ -1,4 +1,7 @@
-/* Hide beta features
+/** 
+User:DinhHuy2010/global.css
+This file is used to apply global styles on all Wikimedia projects.
+*/
 
 #pt-betafeatures, #pt-betafeatures-sticky-header {
     display: none;
