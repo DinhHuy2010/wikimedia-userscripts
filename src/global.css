@@ -47,3 +47,8 @@ i {
 .vector-header-container * {
     font-family: "Cascadia Mono", sans-serif;
 }
+
+.mediawiki * {
+    font-family: "Cascadia Mono" !important;
+    font-size: inherit;
+}
