@@ -5,19 +5,19 @@ import {
 } from "../constants.ts";
 
 function forceShowTagline(): void {
-    if (
-        !IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE &&
-        (mw.config.get("wgIsMainPage") === true || (
-            DATABASE_NAME === "metawiki" &&
-            mw.config.get("wgPageName") !== "Main_Page"
-        ))
-    ) {
-        // Force #siteSub to show on all pages except:
-        //      Special pages
-        //      Wikidata data namespaces
-        //      Main page
-        $("#siteSub").show();
+    if (IS_IN_SPECIAL_NAMESPACE) {
+        return;
     }
+    if (IS_IN_WIKIDATA_DATA_NAMESPACE) {
+        return;
+    }
+    if (mw.config.get("wgIsMainPage") === true) {
+        return;
+    }
+    if (DATABASE_NAME === "metawiki" && mw.config.get("wgPageName") !== "Main_Page") {
+        return;
+    }
+    $("#siteSub").show();
 }
 
 export function executeOnAllWikis(): void {
