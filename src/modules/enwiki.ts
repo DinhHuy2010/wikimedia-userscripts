@@ -61,13 +61,6 @@ export function changeTalktoDiscussion(): void {
     $(selector).text("Discussion");
 }
 
-function hideOptOutMenuOption() {
-    if (VECTOR_SKINS.includes(SKIN)) {
-        return;
-    }
-    $(".vector-main-menu-action-opt-out").hide();
-}
-
 function updateViewLinksForCommons() {
     if (mw.config.get("wgNamespaceNumber") === 6) {
         $("#ca-view-foreign a").text("View on Wikimedia Commons");
@@ -92,7 +85,6 @@ function changesiteSub(): void {
 
 export function executeOnEnWiki(): void {
     log("Loading English Wikipedia specific userscripts...");
-    hideOptOutMenuOption();
     changeTalktoDiscussion();
     updateViewLinksForCommons();
     mw.loader.using(["mediawiki.api"], () => {
