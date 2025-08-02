@@ -47,3 +47,9 @@ i {
 .vector-header-container * {
     font-family: "Cascadia Mono", sans-serif;
 }
+
+/* Minerva skin */
+
+.skin-minerva > div#mw-mf-viewport {
+    font-family: "Cascadia Mono", sans-serif;
+}
