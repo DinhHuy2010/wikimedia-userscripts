@@ -33,7 +33,7 @@ i {
 /* Main contents */
 
 .mw-page-container *, .mw-header * {
-    font-family: "Cascadia Mono" !important;
+    font-family: "Cascadia Mono", sans-serif;
 }
 
 /* Headings */
@@ -52,4 +52,9 @@ i {
 
 .skin-minerva > div#mw-mf-viewport {
     font-family: "Cascadia Mono", sans-serif;
+}
+
+/* Page Previews popups */
+.mwe-popups {
+    font-family: "Cascadia Mono" !important;
 }
