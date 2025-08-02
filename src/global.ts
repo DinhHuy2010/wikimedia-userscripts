@@ -7,235 +7,44 @@
 
 /* Any JavaScript added to this page will be loaded on all wikis where you have an account (see [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:GlobalCssJs documentation]). */
 
-import type {
-    ApiParseParams,
-    ApiQueryPagePropsParams,
-    MediaWikiType,
-    UserScriptRecord,
-    UserScriptsRecord,
-} from "./modules/types.ts";
+import { DATABASE_NAME } from "./constants.ts";
+import { dhoptions } from "./options.ts";
+import { loadExternalUserScript } from "./modules/userscript-loader.ts";
+import { log } from "./modules/utils.ts";
 
-((jq: JQueryStatic, mediawiki: MediaWikiType) => {
-    "use strict";
-    // Load Cascadia Mono from Google Fonts
-    const params = new URLSearchParams({
-        family: "Cascadia Mono:ital@0;1",
-        display: "swap",
-    });
-    const CASCADIA_MONO_FONT_URL = new URL(
-        `https://fonts.googleapis.com/css2?${params.toString()}`,
-    ); // Ensure the URL is valid and absolute
-    const DISAMBIGUATION_PAGE_API_QUERY: ApiQueryPagePropsParams = {
-        "action": "query",
-        "format": "json",
-        "prop": "pageprops",
-        "formatversion": "2",
-        "ppprop": "disambiguation",
-    };
-    const NS = mediawiki.config.get("wgNamespaceNumber");
-    const WIKIBASE_DATA_NS = [640, 120, 146, 0];
-    const IS_IN_WIKIDATA_DATA_NAMESPACE = WIKIBASE_DATA_NS.includes(NS) &&
-        mediawiki.config.get("wgDBname") === "wikidatawiki";
-    const IS_IN_SPECIAL_NAMESPACE = NS < 0;
-    // "*" = All projects
-    // "<wgDBname>" = Specific project
-    const USERSCRIPTS: UserScriptsRecord = {
-        "XTools": { script: "mw:XTools/ArticleInfo.js", wiki: "*" }, // [[mw:XTools]]
-        "HotCat": { script: "mw:MediaWiki:Gadget-HotCat.js", wiki: "*" }, // [[w:en:Wikipedia:HotCat]]
-        "markblocked": {
-            script: "w:en:MediaWiki:Gadget-markblocked.js",
-            wiki: "*",
-        }, // [[w:en:Special:Gadgets#gadget-markblocked]]
-        "purgetab": { script: "w:en:MediaWiki:Gadget-purgetab.js", wiki: "*" }, // [[w:en:Special:Gadgets#gadget-purgetab]]
-        "revisionjumper": {
-            script: "w:de:MediaWiki:Gadget-revisionjumper.js",
-            wiki: "*",
-        }, // [[w:en:User:DerHexer/revisionjumper]]
-        "TwinkleGlobal": {
-            script: "m:User:Xiplus/TwinkleGlobal/load.js",
-            wiki: "*",
-        }, // [[m:User:Xiplus/TwinkleGlobal]]
-        "exlinks": {
-            script: "w:en:MediaWiki:Gadget-exlinks.js",
-            wiki: ["enwiki"],
-        },
-        "ClaimMaps": {
-            script: "d:User:Teester/ClaimMaps.js",
-            wiki: ["wikidatawiki"],
-        },
-        "DisplayColourSwatches": {
-            script: "d:User:Nikki/DisplayColourSwatches.js",
-            wiki: ["wikidatawiki"],
-        },
-        "User:Lectrician1/embeds.js": {
-            script: "d:User:Lectrician1/embeds.js",
-            wiki: ["wikidatawiki"],
-        },
-        "User:Lockal/EditSum.js": {
-            script: "d:User:Lockal/EditSum.js",
-            wiki: ["wikidatawiki"],
-        },
-        "Ultraviolet": {
-            script: "w:en:User:10nm/beta.js",
-            wiki: ["enwiki"],
-        },
-        "CiteHighlighter": {
-            script: "w:en:User:Novem Linguae/Scripts/CiteHighlighter.js",
-            wiki: ["enwiki"],
-        },
-        "sectionLinks.js": {
-            script: "w:en:User:Hilst/Scripts/sectionLinks.js",
-            wiki: ["enwiki"],
-        },
-    };
-    const SCRIPTNAME = "User:DinhHuy2010/global.js";
-
-    function isTalkNamespace(n: number): boolean {
-        return n >= 0 && n % 2 === 1;
+{
+    /**
+     * @description Initialize all external and internal user scripts.
+     * @private
+     */
+    // deno-lint-ignore no-inner-declarations
+    function init(): void {
+        Object.entries(dhoptions.internal_scripts)
+            .forEach(([name, record]) => {
+                loadExternalUserScript(DATABASE_NAME, name, record, true);
+            });
+        Object.entries(dhoptions.external_scripts)
+            .forEach(([name, record]) => {
+                loadExternalUserScript(DATABASE_NAME, name, record, false);
+            });
     }
 
-    function toContentNamespace(n: number): number {
-        if (isTalkNamespace(n)) {
-            return n - 1; // Convert talk namespace to content namespace
-        }
-        return n; // Return the same namespace if it's not a talk namespace
-    }
-
-    function loadCascadiaMonoFont(): void {
-        console.log(`[${SCRIPTNAME}]: Loading Cascadia Mono font...`);
-
-        const link = document.createElement("link");
-        // Preconnect to Google Fonts for performance
-        link.rel = "preconnect";
-        link.href = "https://fonts.googleapis.com";
-        jq("head").append(link);
-
-        const l2 = document.createElement("link");
-        l2.rel = "stylesheet";
-        l2.href = "https://fonts.gstatic.com";
-        l2.crossOrigin = "anonymous";
-        jq("head").append(l2);
-
-        const fl = document.createElement("link");
-        fl.rel = "stylesheet";
-        fl.href = CASCADIA_MONO_FONT_URL.toString();
-        jq("head").append(fl);
-    }
-
-    function renderWikitext(wt: string, opts?: ApiParseParams) {
-        const api = new mediawiki.Api();
-        const html = api.parse(wt, opts);
-        return html;
-    }
-
-    function loadUserScript(name: string, script: UserScriptRecord): void {
-        function execute() {
-            if (typeof script.script === "string") {
-                importScript(script.script);
-            } else if (typeof script.script === "function") {
-                script.script();
-            }
-        }
-
-        let on: string;
-        if (script.wiki === "*") {
-            on = "all Wikimedia projects";
-        } else {
-            on = `on ${script.wiki.join(", ")}`;
-        }
-        if (
-            script.wiki.includes(mediawiki.config.get("wgDBname")) ||
-            script.wiki === "*" || script.wiki.includes("*")
+    // deno-lint-ignore no-inner-declarations
+    function load_specific_scripts_on_wikis() {
+        dhoptions.specific_scripts_on_wikis["*"]();
+        for (
+            const [wiki, script] of Object.entries(
+                dhoptions.specific_scripts_on_wikis,
+            )
         ) {
-            // If the current wiki is in the list or the script is for all wikis
-            console.log(`[${SCRIPTNAME}]: Loading userscript ${on}: ${name}`);
-            execute();
-        } else {
-            // If the script is not for the current wiki, skip execution
-            console.warn(
-                `[${SCRIPTNAME}]: Skipping ${name} as it is not applicable to ${
-                    mediawiki.config.get("wgDBname")
-                }.`,
-            );
-        }
-    }
-
-    function loadOnGlobal(): void {
-        console.log(
-            `[${SCRIPTNAME}]: Loading global userscripts/gadgets on Wikimedia projects...`,
-        );
-        loadCascadiaMonoFont();
-        Object.entries(USERSCRIPTS).forEach(([name, script]) => {
-            loadUserScript(name, script);
-        });
-    }
-
-    function loadOnEnglishWikipedia(): void {
-        console.log(
-            `[${SCRIPTNAME}]: Loading English Wikipedia specific userscripts...`,
-        );
-        jq(".vector-main-menu-action-opt-out").hide();
-        if (mediawiki.config.get("wgNamespaceNumber") === 6) {
-            jq("#ca-view-foreign a").text("View on Wikimedia Commons");
-            jq("#ca-fileExporter a").text("Transfer to Wikimedia Commons");
-        }
-    }
-    function setDisamLabel() {
-        console.log(`[${SCRIPTNAME}]: Setting disambiguation label...`);
-        jq("li[id^='ca-nstab'] > a").text("Disambiguation page");
-    }
-    function setDisamLabelIfNeeded() {
-        const query = structuredClone(DISAMBIGUATION_PAGE_API_QUERY);
-        const contentNS = toContentNamespace(NS);
-        const api = new mediawiki.Api();
-        query.titles = `${
-            mediawiki.config.get("wgFormattedNamespaces")[contentNS]
-        }:${mediawiki.config.get("wgTitle")}`;
-        api.get(query).then((data) => {
-            const isDisambig =
-                data.query.pages[0].pageprops.disambiguation === "";
-            if (isDisambig) {
-                setDisamLabel();
+            if (wiki === "*" || mw.config.get("wgDBname") !== wiki) {
+                continue;
             }
-        });
+            script();
+        }
     }
 
-    function changesiteSub(): void {
-        const WIKITEXT = "{{User:DinhHuy2010/siteSub}}";
-
-        // Change some text on the English Wikipedia
-        jq("#ca-talk a").text("Discussion");
-        mediawiki.loader.using(["mediawiki.api"], () => {
-            renderWikitext(WIKITEXT, {
-                title: mediawiki.config.get("wgPageName"),
-            }).then((html) => jq("#siteSub").html(html))
-                .catch((err) => {
-                    console.error(
-                        `[${SCRIPTNAME}]: Error rendering wikitext:`,
-                        err,
-                    );
-                });
-        });
-    }
-
-    loadOnGlobal();
-    if (mediawiki.config.get("wgDBname") === "enwiki") {
-        mw.hook("wikipage.content").add(changesiteSub);
-        loadOnEnglishWikipedia();
-    }
-
-    if (NS >= 0 && !IS_IN_WIKIDATA_DATA_NAMESPACE) {
-        mediawiki.loader.using(["mediawiki.api"]).then(setDisamLabelIfNeeded);
-    }
-    if (
-        !IS_IN_SPECIAL_NAMESPACE && !IS_IN_WIKIDATA_DATA_NAMESPACE &&
-        !mediawiki.config.get("wgIsMainPage")
-    ) {
-        // Force #siteSub to show on all pages except:
-        //      Special pages
-        //      Wikidata data namespace
-        //      Main page
-        jq("#siteSub").show();
-    }
-    console.log(`[${SCRIPTNAME}]: Userscripts loaded successfully.`);
-})(jQuery, mediaWiki);
+    init();
+    load_specific_scripts_on_wikis();
+    log("Userscripts loaded successfully.");
+}
