@@ -19,7 +19,7 @@ export async function renderWikitext(
 ): Promise<string> {
     const api = new mw.Api();
     const html = await api.parse(wt, opts);
-    return $(html).find("div.mw-parser-output").html();
+    return $(html).html();
 }
 
 export function log(message: string): void {
