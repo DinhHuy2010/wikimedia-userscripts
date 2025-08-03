@@ -19,6 +19,8 @@ const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_VECTOR = "#ca-talk a";
 const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_MINERVA =
     "a.minerva__tab-text[rel='discussion']";
 
+const DEFAULT_SITESUB = "{{User:DinhHuy2010/siteSub}}";
+
 function setDisamLabel() {
     log("Setting disambiguation label...");
     let selector: string;
@@ -47,7 +49,7 @@ function setDisamLabelIfNeeded() {
     });
 }
 
-export function changeTalktoDiscussion(): void {
+function changeTalktoDiscussion(): void {
     log("Changing 'Talk' to 'Discussion'...");
     let selector: string;
     if (SKIN === "minerva") {
@@ -68,11 +70,10 @@ function updateViewLinksForCommons() {
     }
 }
 
-function changesiteSub(): void {
-    const WIKITEXT = "{{User:DinhHuy2010/siteSub}}";
+function changesiteSub(wikitext: string): void {
     // Change tagline on the English Wikipedia
 
-    renderWikitext(WIKITEXT, {
+    renderWikitext(wikitext, {
         title: mw.config.get("wgPageName"),
     })
         .then((html) => $("#siteSub").html(html))
@@ -83,12 +84,20 @@ function changesiteSub(): void {
         });
 }
 
+function getSiteSub(): string {
+    if (mw.config.get("wgNamespaceNumber") === 6) {
+        return "{{User:DinhHuy2010/siteSub/File}}";
+    } else {
+        return DEFAULT_SITESUB;
+    }
+}
+
 export function executeOnEnWiki(): void {
     log("Loading English Wikipedia specific userscripts...");
     changeTalktoDiscussion();
     updateViewLinksForCommons();
     mw.loader.using(["mediawiki.api"], () => {
         setDisamLabelIfNeeded();
-        changesiteSub();
+        changesiteSub(getSiteSub());
     });
 }
