@@ -31,17 +31,10 @@ import { log } from "./modules/utils.ts";
 
     // deno-lint-ignore no-inner-declarations
     function load_specific_scripts_on_wikis() {
+        // Load the specific script for all wikis, if it exists.
         dhoptions.specific_scripts_on_wikis["*"]();
-        for (
-            const [wiki, script] of Object.entries(
-                dhoptions.specific_scripts_on_wikis,
-            )
-        ) {
-            if (wiki === "*" || mw.config.get("wgDBname") !== wiki) {
-                continue;
-            }
-            script();
-        }
+        // Load the specific script for the current wiki, if it exists.
+        dhoptions.specific_scripts_on_wikis[DATABASE_NAME] || (() => {})();
     }
 
     init();
