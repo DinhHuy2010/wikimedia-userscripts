@@ -10,7 +10,7 @@
 import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
 import { loadExternalUserScript } from "./modules/userscript-loader.ts";
-import { log } from "./modules/utils.ts";
+import { log, warn } from "./modules/utils.ts";
 
 {
     /**
@@ -33,8 +33,13 @@ import { log } from "./modules/utils.ts";
     function load_specific_scripts_on_wikis() {
         // Load the specific script for all wikis, if it exists.
         dhoptions.specific_scripts_on_wikis["*"]();
+        const loader = dhoptions.specific_scripts_on_wikis[DATABASE_NAME];
+        if (!loader) {
+            warn(`No specific script found for ${DATABASE_NAME}.`);
+            return;
+        }
         // Load the specific script for the current wiki, if it exists.
-        dhoptions.specific_scripts_on_wikis[DATABASE_NAME] || (() => {})();
+        loader();
     }
 
     init();

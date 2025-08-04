@@ -1,7 +1,8 @@
 {
   "tasks": {
     "build": "deno run --allow-read --allow-run --allow-env ./scripts/build.ts",
-    "publish": "deno run --allow-read=./build/ --allow-env --env-file --allow-net --allow-sys scripts/publish.ts"
+    "publish": "deno run --allow-read=./build/ --allow-env --env-file --allow-net --allow-sys scripts/publish.ts",
+    "buildnpublish": "deno task build && deno task publish"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",
