@@ -15,7 +15,7 @@ import {
 const CSS_SELECTOR_FOR_VECTOR = "li[id^='ca-nstab'] > a > span";
 const CSS_SELECTOR_FOR_MINERVA =
     "a.minerva__tab-text[data-event-name^='tabs.']";
-const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_VECTOR = "#ca-talk a";
+const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_VECTOR = "#ca-talk a > span";
 const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_MINERVA =
     "a.minerva__tab-text[rel='discussion']";
 
