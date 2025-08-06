@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@std/assert@1": "1.0.13",
     "jsr:@std/internal@^1.0.6": "1.0.9",
+    "npm:browserslist-config-wikimedia@0.7": "0.7.0",
     "npm:browserslist@*": "4.25.1",
     "npm:esbuild@*": "0.25.6",
     "npm:esbuild@0.25.6": "0.25.6",
@@ -192,6 +193,9 @@
         "form-data",
         "proxy-from-env"
       ]
+    },
+    "browserslist-config-wikimedia@0.7.0": {
+      "integrity": "sha512-CTa0lv78dXKEgrYsOLCkqO+9UUS3CV9MWEOYHcymgEvx4mYxB80sCoKRCR7wW2SOMNxjaP9hohrZripjnKuRTA=="
     },
     "browserslist@4.25.1": {
       "integrity": "sha512-KGj0KoOMXLpSNkkEI6Z6mShmQy0bc1I+T7K9N81k4WWMrfz+6fQ6es80B/YLAeRoKvjYE1YSHHOW1qe9xIVzHw==",
@@ -465,6 +469,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "npm:browserslist-config-wikimedia@0.7",
       "npm:esbuild@0.25.6",
       "npm:mwn@^3.0.1",
       "npm:types-mediawiki@^1.10.1"
