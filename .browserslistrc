@@ -1,0 +1,4 @@
+# Sources:
+# https://gitlab.wikimedia.org/repos/ci-tools/browserslist-config-wikimedia/
+# https://www.mediawiki.org/wiki/Compatibility
+extends browserslist-config-wikimedia/modern
