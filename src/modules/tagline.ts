@@ -85,7 +85,7 @@ export function setsiteSubByStatus(
 }
 
 export function setsiteSubByPredicate(
-    predicate: () => {status: SiteSubEnum, wikitext?: string},
+    predicate: () => { status: SiteSubEnum; wikitext?: string },
 ): void {
     const o = predicate();
     setsiteSubByStatus(o);

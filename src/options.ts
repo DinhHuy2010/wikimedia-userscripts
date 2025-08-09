@@ -4,7 +4,8 @@ import { executeOnEnWiki } from "./modules/enwiki.ts";
 import { executeOnAllWikis } from "./modules/allwiki.ts";
 import { changeTalktoDiscussion } from "./modules/discussion.ts";
 import { setDisambiguationLabel } from "./modules/disambiguation.ts";
-import { addCaPortlet } from "./modules/ca-portlet.ts";
+import { addCaPortlet } from "./modules/users/ca-portlet-link.ts";
+import { initInterwiki } from "./modules/users/interwiki-userlinks.ts";
 
 export const dhoptions: Configuration = {
     external_scripts: {
@@ -71,6 +72,10 @@ export const dhoptions: Configuration = {
         },
         "addCaPortlet": {
             script: addCaPortlet,
+            wiki: "*",
+        },
+        "users-interwiki": {
+            script: initInterwiki,
             wiki: "*",
         },
     },

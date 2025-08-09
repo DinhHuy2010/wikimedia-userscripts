@@ -1,6 +1,7 @@
 import type {
     ApiParseParams,
     ApiQueryPagePropsParams,
+    CentralAuthApiQueryGlobalUserInfoParams,
 } from "types-mediawiki/api_params";
 
 export type MediaWikiType = typeof mediaWiki;
@@ -49,4 +50,8 @@ export interface Configuration {
     logging: boolean;
 }
 
-export type { ApiParseParams, ApiQueryPagePropsParams };
+export type {
+    ApiParseParams,
+    ApiQueryPagePropsParams,
+    CentralAuthApiQueryGlobalUserInfoParams,
+};
