@@ -2,6 +2,8 @@ import { Configuration } from "./types.ts";
 import { loadCascadiaMonoFont } from "./modules/font-loader.ts";
 import { executeOnEnWiki } from "./modules/enwiki.ts";
 import { executeOnAllWikis } from "./modules/allwiki.ts";
+import { changeTalktoDiscussion } from "./modules/discussion.ts";
+import { setDisambiguationLabel } from "./modules/disambiguation.ts";
 
 export const dhoptions: Configuration = {
     external_scripts: {
@@ -22,7 +24,7 @@ export const dhoptions: Configuration = {
         }, // [[m:User:Xiplus/TwinkleGlobal]]
         "exlinks": {
             script: "w:en:MediaWiki:Gadget-exlinks.js",
-            wiki: ["enwiki"],
+            wiki: "*",
         },
         "ClaimMaps": {
             script: "d:User:Teester/ClaimMaps.js",
@@ -56,6 +58,14 @@ export const dhoptions: Configuration = {
     internal_scripts: {
         "CascadiaMonoLoader": {
             script: loadCascadiaMonoFont,
+            wiki: "*",
+        },
+        "changeTalktoDiscussion": {
+            script: changeTalktoDiscussion,
+            wiki: ["enwiki"],
+        },
+        "setDisambiguationLabel": {
+            script: setDisambiguationLabel,
             wiki: "*",
         },
     },

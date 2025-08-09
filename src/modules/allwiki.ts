@@ -3,30 +3,32 @@ import {
     IS_IN_SPECIAL_NAMESPACE,
     IS_IN_WIKIDATA_DATA_NAMESPACE,
     SKIN,
-    VECTOR_SKINS,
 } from "../constants.ts";
+import { setsiteSubByPredicate, SiteSubEnum } from "./tagline.ts";
 
-function forceShowTagline(): void {
+function forceShowTagline(): { status: SiteSubEnum } {
     if (IS_IN_SPECIAL_NAMESPACE) {
-        return;
+        return { status: SiteSubEnum.HIDE };
     }
     if (IS_IN_WIKIDATA_DATA_NAMESPACE) {
-        return;
+        return { status: SiteSubEnum.HIDE };
     }
     if (mw.config.get("wgIsMainPage") === true) {
-        return;
+        return { status: SiteSubEnum.HIDE };
     }
     if (
-        DATABASE_NAME === "metawiki" &&
-        mw.config.get("wgPageName") === "Main_Page"
+        DATABASE_NAME === "metawiki"
     ) {
-        return;
+        const title = mw.Title.newFromUserInput(mw.config.get("wgPageName"));
+        if (title && title.getMain().split("/")[0] === "Main_Page") {
+            return { status: SiteSubEnum.HIDE };
+        }
     }
-    $("#siteSub").show();
+    return { status: SiteSubEnum.SHOW };
 }
 
 function hideOptOutMenuOption() {
-    if (!VECTOR_SKINS.includes(SKIN)) {
+    if (SKIN !== "vector-2022") {
         return;
     }
     $(".vector-main-menu-action-opt-out").hide();
@@ -34,5 +36,5 @@ function hideOptOutMenuOption() {
 
 export function executeOnAllWikis(): void {
     hideOptOutMenuOption();
-    forceShowTagline();
+    setsiteSubByPredicate(forceShowTagline);
 }

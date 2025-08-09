@@ -30,3 +30,4 @@ export const IS_IN_WIKIDATA_DATA_NAMESPACE =
     mw.config.get("wgDBname") === "wikidatawiki";
 export const VECTOR_SKINS = ["vector", "vector-2022"];
 export const SKIN = mw.config.get("skin");
+export const SKINS_FOR_VECTOR_SELECTOR = [...VECTOR_SKINS, "monobook"];
