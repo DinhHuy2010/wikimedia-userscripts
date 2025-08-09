@@ -25,8 +25,9 @@ async function getLocalAccounts(username: string): Promise<LocalAccount[]> {
     const gui = results.query.globaluserinfo;
     const name = gui.name;
     gui.merged = gui.merged || [];
+    gui.merged = gui.merged.filter((local: any) => local.editcount >= 1);
     const locals: LocalAccount[] = gui.merged.map((local: any) => {
-        const wikiname = WIKIS[local.wiki];
+        const wikiname = WIKIS[local.wiki] || local.wiki;
         return {
             name: wikiname,
             portletID: `${PORTLET_ID}-${local.wiki}`,
@@ -43,7 +44,7 @@ function initPortlet(): void {
     mw.util.addPortlet(
         PORTLET_ID,
         "User in other projects",
-        "#p-coll-print_export",
+        "#p-wikibase-otherprojects",
     );
 }
 
@@ -66,12 +67,17 @@ export function initInterwiki(): void {
     }
     initPortlet();
     const username = mw.config.get("wgTitle");
-    getLocalAccounts(username)
-        .then(fillPortletLinks)
-        .catch((error) => {
-            console.error("Error fetching local accounts:", error);
-            mw.notify("Error fetching user information from other projects.", {
-                type: "error",
+    mw.loader.using("mediawiki.api").then(() => {
+        getLocalAccounts(username)
+            .then(fillPortletLinks)
+            .catch((error) => {
+                console.error("Error fetching local accounts:", error);
+                mw.notify(
+                    "Error fetching user information from other projects.",
+                    {
+                        type: "error",
+                    },
+                );
             });
-        });
+    });
 }
