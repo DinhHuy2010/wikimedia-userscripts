@@ -3,7 +3,7 @@ import { setTabLabel } from "./tabs.ts";
 import { toContentNamespace } from "./utils.ts";
 
 async function isPageDisambiguation(page: string): Promise<boolean> {
-    const titleobj = mw.Title.newFromUserInput(page);
+    const titleobj = mw.Title.newFromText(page);
     if (!titleobj) {
         throw new Error(`Invalid page name: ${page}`);
     }
