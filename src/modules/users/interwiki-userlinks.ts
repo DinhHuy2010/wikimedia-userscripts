@@ -66,7 +66,7 @@ export function initInterwiki(): void {
         return; // Not a user page
     }
     initPortlet();
-    const username = mw.config.get("wgTitle");
+    const username = mw.config.get("wgTitle").split("/")[0];
     mw.loader.using("mediawiki.api").then(() => {
         getLocalAccounts(username)
             .then(fillPortletLinks)
