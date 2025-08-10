@@ -2,7 +2,7 @@ import { ApiParseParams } from "../types.ts";
 import { SCRIPT_NAME } from "../constants.ts";
 import { dhoptions } from "../options.ts";
 
-function isTalkNamespace(n: number): boolean {
+export function isTalkNamespace(n: number): boolean {
     return n >= 0 && n % 2 === 1;
 }
 
