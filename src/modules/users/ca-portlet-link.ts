@@ -1,5 +1,7 @@
+import { toContentNamespace } from "../utils.ts";
+
 export function addCaPortlet() {
-    if (mw.config.get("wgNamespaceNumber") !== 2) {
+    if (toContentNamespace(mw.config.get("wgNamespaceNumber")) !== 2) {
         return;
     }
     const username = mw.config.get("wgTitle");

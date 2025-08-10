@@ -1,3 +1,5 @@
+import { toContentNamespace } from "../utils.ts";
+
 const PORTLET_ID = "p-dhuserinotherprojects";
 
 async function getWikidataItem(username: string): Promise<string | null> {
@@ -36,7 +38,7 @@ function initPortlet(): void {
 }
 
 export function initWikidata(): void {
-    if (mw.config.get("wgNamespaceNumber") !== 2) {
+    if (toContentNamespace(mw.config.get("wgNamespaceNumber")) !== 2) {
         return; // Not a user page
     }
     initPortlet();
