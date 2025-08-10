@@ -4,7 +4,7 @@ function hideEditButton(): void {
     $("#ca-edit").hide();
 }
 
-export function onDiscussionPages(): void {
+export function onPages(): void {
     if (isTalkNamespace(mw.config.get("wgNamespaceNumber"))) {
         hideEditButton();
     }

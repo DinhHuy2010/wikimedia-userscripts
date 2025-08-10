@@ -6,7 +6,7 @@ import { changeTalktoDiscussion } from "./modules/discussion.ts";
 import { setDisambiguationLabel } from "./modules/disambiguation.ts";
 import { addCaPortlet } from "./modules/users/ca-portlet-link.ts";
 import { initWikidata } from "./modules/users/wikidata.ts";
-import { onDiscussionPages } from "./modules/discussionpages.ts";
+import { onPages } from "./modules/onpages.ts";
 
 export const dhoptions: Configuration = {
     external_scripts: {
@@ -80,7 +80,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         },
         "hide-editbutton-discussion": {
-            script: onDiscussionPages,
+            script: onPages,
             "wiki": "*",
         }
     },
