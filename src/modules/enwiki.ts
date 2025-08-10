@@ -23,8 +23,10 @@ function getSiteSub(): {
             status: SiteSubEnum.USE_CUSTOM,
             wikitext: "{{User:DinhHuy2010/siteSub/File}}",
         };
-    } else {
+    } else if (mw.config.get("wgNamespaceNumber") === 0) {
         return { status: SiteSubEnum.USE_CUSTOM, wikitext: DEFAULT_SITESUB };
+    } else {
+        return { status: SiteSubEnum.HIDE };
     }
 }
 
