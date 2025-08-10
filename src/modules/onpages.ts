@@ -9,10 +9,12 @@ function hideViewSourceButton(): void {
 }
 
 function shouldHideEditButton(): "edit" | "viewsource" | null {
-    if (isTalkNamespace(mw.config.get("wgNamespaceNumber"))) {
+    const ns = mw.config.get("wgNamespaceNumber");
+    // MediaWiki talk does not have a "Add topic" button
+    if (isTalkNamespace(ns) && ns !== 9) {
         return "edit";
     }
-    if (mw.config.get("wgNamespaceNumber") == 8) {
+    if (ns == 8) {
         // MediaWiki namespace
         if (mw.config.get("wgIsProbablyEditable") === false) {
             return "viewsource";
