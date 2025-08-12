@@ -68,3 +68,8 @@ body * {
 span.mw-rcfilters-ui-filterWrapperWidget-showNewChanges {
     margin-right: -240px !important;
 }
+
+/* Legacy Vector opt out button */
+.skin-vector-2022 * > .vector-main-menu-action-opt-out {
+    display: none !important;
+}

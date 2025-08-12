@@ -2,7 +2,6 @@ import {
     DATABASE_NAME,
     IS_IN_SPECIAL_NAMESPACE,
     IS_IN_WIKIDATA_DATA_NAMESPACE,
-    SKIN,
 } from "../constants.ts";
 import { setsiteSubByPredicate, SiteSubEnum } from "./tagline.ts";
 
@@ -24,17 +23,9 @@ function forceShowTagline(): { status: SiteSubEnum } {
             return { status: SiteSubEnum.HIDE };
         }
     }
-    return { status: SiteSubEnum.SHOW };
-}
-
-function hideOptOutMenuOption() {
-    if (SKIN !== "vector-2022") {
-        return;
-    }
-    $(".vector-main-menu-action-opt-out").hide();
+    return { status: SiteSubEnum.USE_DEFAULT };
 }
 
 export function executeOnAllWikis(): void {
-    hideOptOutMenuOption();
     setsiteSubByPredicate(forceShowTagline);
 }
