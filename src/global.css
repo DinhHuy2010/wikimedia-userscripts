@@ -65,6 +65,6 @@ body * {
 }
 
 /* Recent changes */
-.mw-rcfilters-ui-filterWrapperWidget-showNewChanges .oo-ui-buttonWidget {
-    margin-right: -160px;
+span.mw-rcfilters-ui-filterWrapperWidget-showNewChanges {
+    margin-right: -180px !important;
 }
