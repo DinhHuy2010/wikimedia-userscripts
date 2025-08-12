@@ -29,7 +29,7 @@ function addUserPageLink(link: {
         return;
     }
     const label = link.type === "local"
-        ? `${link.home} user page`
+        ? `User page at ${wikis[link.home || ""]?.label}`
         : "Global user page at Meta-Wiki";
     const tooltip = link.type === "local"
         ? `View this user page at this user's home wiki`
@@ -58,6 +58,11 @@ async function getUserPageLink(home: string, username: string): Promise<
         "formatversion": "2",
         "titles": "User:" + username,
     };
+    async function doesNotHaveLocalPage(url: string): Promise<boolean> {
+        const f = new mw.ForeignApi(`${url}w/api.php`);
+        const out = await f.get(p);
+        return out.query?.pages?.[0]?.missing === true;
+    }
     if (DATABASE_NAME === "metawiki") {
         // In Meta-Wiki, add a link to the user's page on their home wiki, if exists
         const base_url = wikis[home]?.url;
@@ -65,28 +70,28 @@ async function getUserPageLink(home: string, username: string): Promise<
             warn(`No URL found for home wiki: ${home}`);
             return null;
         }
-        const f = new mw.ForeignApi(`${base_url}/w/api.php`);
-        const out = await f.get(p);
-        if (out.query?.pages?.[0]?.missing) {
+        if (await doesNotHaveLocalPage(base_url)) {
+            // No local user page, return null
             return null;
         }
         return {
             type: "local",
-            url: `${base_url}/wiki/User:${username}`,
+            url: `${base_url}wiki/User:${username}`,
             home: home,
         };
     } else {
         // Not in Meta-Wiki, return a global link
-        const f = new mw.ForeignApi("https://meta.wikimedia.org/w/api.php");
-        const out = await f.get(p);
-        if (out.query?.pages?.[0]?.missing) {
-            // No Meta-Wiki user page
-            return null;
+        const doesLocalPageExist =
+            !(await doesNotHaveLocalPage(wikis[home]?.url || ""));
+        const doesMetaPageExist =
+            !(await doesNotHaveLocalPage("https://meta.wikimedia.org/"));
+        if (doesLocalPageExist && doesMetaPageExist) {
+            return {
+                type: "global",
+                url: `https://meta.wikimedia.org/wiki/User:${username}`,
+            };
         }
-        return {
-            type: "global",
-            url: `https://meta.wikimedia.org/wiki/User:${username}`,
-        };
+        return null;
     }
 }
 
