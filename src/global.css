@@ -63,3 +63,8 @@ i {
 body * {
     font-family: "Cascadia Mono", sans-serif;
 }
+
+/* Recent changes */
+.mw-rcfilters-ui-filterWrapperWidget-showNewChanges .oo-ui-buttonWidget {
+    margin-right: -160px;
+}
