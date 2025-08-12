@@ -1,5 +1,5 @@
 import { SKIN, SKINS_FOR_VECTOR_SELECTOR } from "../constants.ts";
-import { warn } from "./utils.ts";
+import { warn } from "../utils.ts";
 
 const CSS_SELECTOR_FOR_VECTOR = "li[id^='ca-nstab'] > a > span";
 const CSS_SELECTOR_FOR_MINERVA =

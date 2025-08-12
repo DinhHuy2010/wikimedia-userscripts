@@ -1,5 +1,5 @@
 import { SKIN, SKINS_FOR_VECTOR_SELECTOR } from "../constants.ts";
-import { log, warn } from "./utils.ts";
+import { log, warn } from "../utils.ts";
 
 const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_VECTOR = "#ca-talk a > span";
 const CSS_SELECTOR_DISSCUSSION_BUTTION_FOR_MINERVA =

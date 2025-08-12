@@ -1,4 +1,4 @@
-import { toContentNamespace } from "../utils.ts";
+import { toContentNamespace } from "../../utils.ts";
 
 const PORTLET_ID = "p-dhuserinotherprojects";
 

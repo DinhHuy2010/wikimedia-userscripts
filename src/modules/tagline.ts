@@ -1,4 +1,4 @@
-import { error, log, renderWikitext } from "./utils.ts";
+import { error, log, renderWikitext } from "../utils.ts";
 
 const SITESUB_SELECTOR = "#siteSub";
 

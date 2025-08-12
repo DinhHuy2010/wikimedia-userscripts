@@ -1,6 +1,6 @@
 import { SKIN, SKINS_FOR_VECTOR_SELECTOR } from "../constants.ts";
 import { setsiteSubByPredicate, SiteSubEnum } from "./tagline.ts";
-import { log } from "./utils.ts";
+import { log } from "../utils.ts";
 
 const DEFAULT_SITESUB = "{{User:DinhHuy2010/siteSub}}";
 

@@ -1,5 +1,5 @@
 import type { UserScriptRecord, WikiDBWildCardType } from "../types.ts";
-import { log, warn } from "./utils.ts";
+import { log, warn } from "../utils.ts";
 
 /**
  * @description Check if a user script should be loaded based on the wiki and wildcard.

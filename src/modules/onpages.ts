@@ -1,4 +1,4 @@
-import { isTalkNamespace } from "./utils.ts";
+import { isTalkNamespace } from "../utils.ts";
 
 function hideEditButton(): void {
     $("#ca-edit").hide();

@@ -1,4 +1,4 @@
-import { toContentNamespace, warn } from "../utils.ts";
+import { toContentNamespace, warn } from "../../utils.ts";
 import { extractGlobalUserInfo } from "./utils.ts";
 import _wikis from "../../wikis.json" with { type: "json" };
 import { ApiQueryParams, Wikis } from "../../types.ts";

@@ -1,6 +1,6 @@
 import { DISAMBIGUATION_PAGE_API_QUERY } from "../constants.ts";
 import { setTabLabel } from "./tabs.ts";
-import { log, toContentNamespace } from "./utils.ts";
+import { log, toContentNamespace } from "../utils.ts";
 
 async function isPageDisambiguation(
     title: string,
