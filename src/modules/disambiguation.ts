@@ -13,24 +13,20 @@ async function isPageDisambiguation(
         mw.config.get("wgFormattedNamespaces")[contentNS]
     }:${title}`;
     const data = await api.get(query);
-    const isDisambig = data.query.pages[0].pageprops.disambiguation === "";
+    const isDisambig = data.query.pages[0].pageprops?.disambiguation === "";
     return isDisambig;
 }
 
 export function setDisambiguationLabel(): void {
-    async function updateTabForDisambiguation() {
-        const isDisambig = await isPageDisambiguation(
-            mw.config.get("wgTitle"),
-            mw.config.get("wgNamespaceNumber"),
-        );
-        if (isDisambig) {
-            log("Setting disambiguation label for the current tab...");
-            setTabLabel("Disambiguation page");
-        }
-    }
-    mw.loader.using("mediawiki.api").then(
-        async () => {
-            await updateTabForDisambiguation();
+    isPageDisambiguation(
+        mw.config.get("wgTitle"),
+        mw.config.get("wgNamespaceNumber"),
+    ).then(
+        (isDisambig) => {
+            if (isDisambig) {
+                log("Setting disambiguation label for the current tab...");
+                setTabLabel("Disambiguation page");
+            }
         },
     );
 }

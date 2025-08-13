@@ -27,11 +27,6 @@ import { log, warn } from "./utils.ts";
             .forEach(([name, record]) => {
                 loadExternalUserScript(DATABASE_NAME, name, record, false);
             });
-    }
-
-    // deno-lint-ignore no-inner-declarations
-    function load_specific_scripts_on_wikis() {
-        // Load the specific script for all wikis, if it exists.
         dhoptions.specific_scripts_on_wikis["*"]();
         const loader = dhoptions.specific_scripts_on_wikis[DATABASE_NAME];
         if (!loader) {
@@ -41,8 +36,10 @@ import { log, warn } from "./utils.ts";
         // Load the specific script for the current wiki, if it exists.
         loader();
     }
-
-    init();
-    load_specific_scripts_on_wikis();
+    mw.loader.using([
+        "mediawiki.util",
+        "mediawiki.api",
+        "mediawiki.Title",
+    ], init);
     log("Userscripts loaded successfully.");
 }

@@ -37,18 +37,16 @@ function setsiteSub(html: string): void {
 }
 
 function setsiteSubbyWikitext(wikitext: string): void {
-    mw.loader.using("mediawiki.api").then(() => {
-        renderWikitext(wikitext)
-            .then((html) => {
-                setsiteSub(html);
-            })
-            .catch((err) => {
-                error(`Error rendering wikitext: ${err}`);
-            })
-            .finally(() => {
-                log("siteSub set by wikitext.");
-            });
-    });
+    renderWikitext(wikitext)
+        .then((html) => {
+            setsiteSub(html);
+        })
+        .catch((err) => {
+            error(`Error rendering wikitext: ${err}`);
+        })
+        .finally(() => {
+            log("siteSub set by wikitext.");
+        });
 }
 
 export function setsiteSubByStatus(

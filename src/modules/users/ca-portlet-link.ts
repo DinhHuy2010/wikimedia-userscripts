@@ -45,12 +45,12 @@ function addUserPageLink(link: {
     );
 }
 
-async function getUserPageLink(home: string, username: string): Promise<
+async function getUserPageLinks(home: string, username: string): Promise<
     {
         type: "local" | "global";
         url: string;
         home?: string;
-    } | null
+    }[]
 > {
     const p: ApiQueryParams = {
         "action": "query",
@@ -65,33 +65,53 @@ async function getUserPageLink(home: string, username: string): Promise<
     }
     if (DATABASE_NAME === "metawiki") {
         // In Meta-Wiki, add a link to the user's page on their home wiki, if exists
+        if (home === "metawiki") {
+            // Home wiki is Meta-Wiki, return empty array
+            return [];
+        }
         const base_url = wikis[home]?.url;
         if (!base_url) {
             warn(`No URL found for home wiki: ${home}`);
-            return null;
+            return [];
         }
         if (await doesNotHaveLocalPage(base_url)) {
-            // No local user page, return null
-            return null;
+            // No local user page, return empty array
+            return [];
         }
-        return {
+        return [{
             type: "local",
             url: `${base_url}wiki/User:${username}`,
             home: home,
-        };
+        }];
     } else {
         // Not in Meta-Wiki, return a global link
         const doesLocalPageExist =
             !(await doesNotHaveLocalPage(wikis[home]?.url || ""));
         const doesMetaPageExist =
             !(await doesNotHaveLocalPage("https://meta.wikimedia.org/"));
+        const links: {
+            type: "local" | "global";
+            url: string;
+            home?: string;
+        }[] = [];
         if (doesLocalPageExist && doesMetaPageExist) {
-            return {
+            links.push({
                 type: "global",
                 url: `https://meta.wikimedia.org/wiki/User:${username}`,
-            };
+            });
         }
-        return null;
+        if (DATABASE_NAME !== home && home !== "metawiki") {
+            // Not in home wiki, add local link if it exists
+            // Also global link already added so skip if home wiki is Meta-Wiki
+            if (doesLocalPageExist) {
+                links.push({
+                    type: "local",
+                    url: `${wikis[home]?.url}wiki/User:${username}`,
+                    home: home,
+                });
+            }
+        }
+        return links;
     }
 }
 
@@ -102,12 +122,9 @@ export function addCaPortlet() {
         exists_promise.then((_: { home: string; name: string } | null) => {
             if (_ !== null) {
                 addCentralAuthLink(username);
-                getUserPageLink(_.home, _.name).then(
-                    (_) => {
-                        if (_ === null) {
-                            return;
-                        }
-                        addUserPageLink(_);
+                getUserPageLinks(_.home, _.name).then(
+                    (links) => {
+                        links.forEach(addUserPageLink);
                     },
                 );
             }
@@ -116,5 +133,5 @@ export function addCaPortlet() {
     if (toContentNamespace(mw.config.get("wgNamespaceNumber")) !== 2) {
         return;
     }
-    mw.loader.using("mediawiki.api", main);
+    main();
 }
