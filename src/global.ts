@@ -19,22 +19,14 @@ import { log, warn } from "./utils.ts";
      */
     // deno-lint-ignore no-inner-declarations
     function init(): void {
-        Object.entries(dhoptions.internal_scripts)
+        Object.entries(dhoptions.internalScripts)
             .forEach(([name, record]) => {
                 loadExternalUserScript(DATABASE_NAME, name, record, true);
             });
-        Object.entries(dhoptions.external_scripts)
+        Object.entries(dhoptions.externalScripts)
             .forEach(([name, record]) => {
                 loadExternalUserScript(DATABASE_NAME, name, record, false);
             });
-        dhoptions.specific_scripts_on_wikis["*"]();
-        const loader = dhoptions.specific_scripts_on_wikis[DATABASE_NAME];
-        if (!loader) {
-            warn(`No specific script found for ${DATABASE_NAME}.`);
-            return;
-        }
-        // Load the specific script for the current wiki, if it exists.
-        loader();
     }
     mw.loader.using([
         "mediawiki.util",
