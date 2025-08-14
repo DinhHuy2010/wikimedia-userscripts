@@ -42,3 +42,8 @@ export function error(message: string): void {
     }
     console.error(`[${SCRIPT_NAME}]: ${message}`);
 }
+
+export function isOnMobileView(): boolean {
+    // https://www.mediawiki.org/w/index.php?title=Extension:MobileFrontend&oldid=7816489#FAQ
+    return $(".mw-mf").length !== 0;
+}
