@@ -10,7 +10,7 @@
 import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
 import { loadExternalUserScript } from "./modules/userscript-loader.ts";
-import { log, warn } from "./utils.ts";
+import { log } from "./utils.ts";
 
 {
     /**
