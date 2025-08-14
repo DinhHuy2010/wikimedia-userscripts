@@ -26,6 +26,6 @@ function forceShowTagline(): { status: SiteSubEnum } {
     return { status: SiteSubEnum.USE_DEFAULT };
 }
 
-export function executeOnAllWikis(): void {
+export function executeToEnforce(): void {
     setsiteSubByPredicate(forceShowTagline);
 }

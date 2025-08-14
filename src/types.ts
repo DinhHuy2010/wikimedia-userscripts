@@ -1,14 +1,18 @@
 import type {
     ApiParseParams,
     ApiQueryPagePropsParams,
+    ApiQueryParams,
     CentralAuthApiQueryGlobalUserInfoParams,
-    ApiQueryParams
 } from "types-mediawiki/api_params";
 
-export type MediaWikiType = typeof mediaWiki;
-export type WikiDBWildCardType = string[] | "*";
+export type WikiDBWildCardType = string | string[] | RegExp;
+type UserScriptSourceInformation = {
+    sourcewiki: string;
+    title: string;
+    ctype?: "text/javascript" | "text/css";
+}
 
-type ScriptHandlerOrLocation = string | (() => void);
+type ScriptHandlerOrLocation = string | (() => void) | UserScriptSourceInformation;
 
 // {<string>: {script: <string> | <function>, wiki: <wiki>}}
 // If string, use importScript(<string>);
@@ -19,11 +23,6 @@ export type UserScriptRecord = {
 };
 export type UserScriptsRecord = Record<string, UserScriptRecord>;
 
-interface SSWikis {
-    "*": () => void;
-    [wiki: string]: () => void;
-}
-
 /**
  * @description Represents the global configuration for this userscript.
  * @public
@@ -33,17 +32,12 @@ export interface Configuration {
      * @description A record of user scripts.
      * @type {UserScriptsRecord}
      */
-    external_scripts: UserScriptsRecord;
+    externalScripts: UserScriptsRecord;
     /**
      * @description A record of internal scripts.
      * @type {UserScriptsRecord}
      */
-    internal_scripts: UserScriptsRecord;
-    /**
-     * @description A record of specific scripts to run on certain wikis.
-     * @type {SSWikis}
-     */
-    specific_scripts_on_wikis: SSWikis;
+    internalScripts: UserScriptsRecord;
     /**
      * @description Should logging be enabled?
      * @type {boolean}
@@ -72,8 +66,8 @@ interface WikiInfo {
 export type Wikis = Record<string, WikiInfo>;
 
 export type {
-    ApiQueryParams,
     ApiParseParams,
     ApiQueryPagePropsParams,
+    ApiQueryParams,
     CentralAuthApiQueryGlobalUserInfoParams,
 };

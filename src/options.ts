@@ -1,7 +1,7 @@
 import { Configuration } from "./types.ts";
 import { loadCascadiaMonoFont } from "./modules/font-loader.ts";
 import { executeOnEnWiki } from "./modules/enwiki.ts";
-import { executeOnAllWikis } from "./modules/allwiki.ts";
+import { executeToEnforce } from "./modules/forcetagineshow.ts";
 import { changeTalktoDiscussion } from "./modules/discussion.ts";
 import { setDisambiguationLabel } from "./modules/disambiguation.ts";
 import { addCaPortlet } from "./modules/users/ca-portlet-link.ts";
@@ -9,7 +9,7 @@ import { initWikidata } from "./modules/users/wikidata.ts";
 import { onPages } from "./modules/onpages.ts";
 
 export const dhoptions: Configuration = {
-    external_scripts: {
+    externalScripts: {
         "XTools": { script: "mw:XTools/ArticleInfo.js", wiki: "*" }, // [[mw:XTools]]
         "HotCat": { script: "mw:MediaWiki:Gadget-HotCat.js", wiki: "*" }, // [[w:en:Wikipedia:HotCat]]
         "markblocked": {
@@ -58,7 +58,7 @@ export const dhoptions: Configuration = {
             wiki: ["enwiki"],
         },
     },
-    internal_scripts: {
+    internalScripts: {
         "CascadiaMonoLoader": {
             script: loadCascadiaMonoFont,
             wiki: "*",
@@ -82,11 +82,15 @@ export const dhoptions: Configuration = {
         "hide-editbutton-discussion": {
             script: onPages,
             "wiki": "*",
+        },
+        "forcetagineshow": {
+            script: executeToEnforce,
+            "wiki": "*",
+        },
+        "enwiki-specific": {
+            script: executeOnEnWiki,
+            wiki: ["enwiki"],
         }
-    },
-    specific_scripts_on_wikis: {
-        "enwiki": executeOnEnWiki,
-        "*": executeOnAllWikis,
     },
     logging: true,
 };
