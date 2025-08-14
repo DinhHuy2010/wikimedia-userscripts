@@ -3,7 +3,8 @@
  * @description Constants used in the global script
  */
 
-import { ApiQueryPagePropsParams } from "./types.ts";
+import { ApiQueryPagePropsParams, Wikis } from "./types.ts";
+import _wikis from "./wikis.json" with { type: "json" };
 
 const params = new URLSearchParams({
     family: "Cascadia Mono:ital@0;1",
@@ -31,3 +32,4 @@ export const IS_IN_WIKIDATA_DATA_NAMESPACE =
 export const VECTOR_SKINS = ["vector", "vector-2022"];
 export const SKIN = mw.config.get("skin");
 export const SKINS_FOR_VECTOR_SELECTOR = [...VECTOR_SKINS, "monobook"];
+export const WIKIS = _wikis as Wikis;
