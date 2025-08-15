@@ -121,6 +121,13 @@ export const dhoptions: Configuration = {
             },
             "wiki": ["wikidatawiki", "commonswiki"],
         },
+        "MoveToDraft": {
+            script: {
+                sourcewiki: "enwiki",
+                title: "User:MPGuy2824/MoveToDraft.js",
+            },
+            wiki: ["enwiki"],
+        }
     },
     internalScripts: {
         "CascadiaMonoLoader": {
