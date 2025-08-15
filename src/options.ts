@@ -108,6 +108,19 @@ export const dhoptions: Configuration = {
             },
             wiki: ["enwiki"],
         },
+        "RTRC": {
+            script: () => {
+                // Copied from https://meta.wikimedia.org/w/index.php?title=User:Krinkle/Tools/Real-Time_Recent_Changes&oldid=28838081
+                // [[File:Krinkle_RTRC.js]]
+                mw.loader.getState("ext.gadget.rtrc")
+                    ? mw.loader.load("ext.gadget.rtrc")
+                    : mw.loader.load(
+                        "https://www.mediawiki.org/w/load.php?modules=ext.gadget.rtrc&lang=" +
+                            mw.config.get("wgUserLanguage", "en"),
+                    );
+            },
+            "wiki": ["wikidatawiki", "commonswiki"],
+        },
     },
     internalScripts: {
         "CascadiaMonoLoader": {
