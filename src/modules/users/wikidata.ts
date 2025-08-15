@@ -1,3 +1,4 @@
+import { NAMESPACE } from "../../constants.ts";
 import { toContentNamespace } from "../../utils.ts";
 
 const PORTLET_ID = "p-dhuserinotherprojects";
@@ -38,7 +39,7 @@ function initPortlet(): void {
 }
 
 export function initWikidata(): void {
-    if (toContentNamespace(mw.config.get("wgNamespaceNumber")) !== 2) {
+    if (toContentNamespace(NAMESPACE) !== 2) {
         return; // Not a user page
     }
     initPortlet();

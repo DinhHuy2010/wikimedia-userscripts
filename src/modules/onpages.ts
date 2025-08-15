@@ -1,3 +1,4 @@
+import { NAMESPACE } from "../constants.ts";
 import { isTalkNamespace } from "../utils.ts";
 
 function hideEditButton(): void {
@@ -9,12 +10,11 @@ function hideViewSourceButton(): void {
 }
 
 function shouldHideEditButton(): "edit" | "viewsource" | null {
-    const ns = mw.config.get("wgNamespaceNumber");
     // MediaWiki talk does not have a "Add topic" button
-    if (isTalkNamespace(ns) && ns !== 9) {
+    if (isTalkNamespace(NAMESPACE) && NAMESPACE !== 9) {
         return "edit";
     }
-    if (ns == 8) {
+    if (NAMESPACE == 8) {
         // MediaWiki namespace
         if (mw.config.get("wgIsProbablyEditable") === false) {
             return "viewsource";

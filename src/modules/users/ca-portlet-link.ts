@@ -1,7 +1,7 @@
 import { toContentNamespace, warn } from "../../utils.ts";
 import { extractGlobalUserInfo } from "./utils.ts";
 import { ApiQueryParams } from "../../types.ts";
-import { DATABASE_NAME } from "../../constants.ts";
+import { DATABASE_NAME, NAMESPACE } from "../../constants.ts";
 import { WIKIS } from "../../constants.ts";
 
 function addCentralAuthLink(username: string): void {
@@ -126,7 +126,7 @@ export function addCaPortlet() {
             }
         });
     }
-    if (toContentNamespace(mw.config.get("wgNamespaceNumber")) !== 2) {
+    if (toContentNamespace(NAMESPACE) !== 2) {
         return;
     }
     main();
