@@ -1,4 +1,9 @@
-import type { UserScriptRecord, WikiDBWildCardType } from "../types.ts";
+import { WIKIS } from "../constants.ts";
+import type {
+    ScriptHandlerOrLocation,
+    UserScriptRecord,
+    WikiDBWildCardType,
+} from "../types.ts";
 import { log, warn } from "../utils.ts";
 
 /**
@@ -13,6 +18,10 @@ function shouldLoad(wildcard: WikiDBWildCardType, wiki: string): boolean {
         return true;
     } else if (Array.isArray(wildcard)) {
         return wildcard.includes(wiki);
+    } else if (typeof wildcard === "string") {
+        return wildcard === wiki;
+    } else if (wildcard instanceof RegExp) {
+        return wildcard.test(wiki);
     }
     return false;
 }
@@ -24,22 +33,10 @@ function shouldLoad(wildcard: WikiDBWildCardType, wiki: string): boolean {
 function printInfo(
     name: string,
     wiki: string,
-    record: UserScriptRecord,
     internal: boolean,
 ): void {
-    if (record.wiki === "*") {
-        log(
-            `[${wiki}]: Loading ${
-                internal ? "internal" : "external"
-            } script ${name} for all Wikimedia projects.`,
-        );
-    } else {
-        log(
-            `[${wiki}]: Loading ${
-                internal ? "internal" : "external"
-            } script ${name} for wiki(s): ${record.wiki.join(", ")}.`,
-        );
-    }
+    const stype = internal ? "internal" : "external";
+    log(`Loading ${stype} script ${name} on ${wiki}.`);
 }
 
 /**
@@ -49,10 +46,31 @@ function printInfo(
 function printWarning(
     name: string,
     wiki: string,
+    internal: boolean,
 ): void {
+    const stype = internal ? "internal" : "external";
     warn(
-        `Skipping script ${name} as it is not applicable to ${wiki}.`,
+        `Skipping ${stype} script ${name} as it is not applicable to ${wiki}.`,
     );
+}
+
+function executeScript(script: ScriptHandlerOrLocation) {
+    if (typeof script === "string") {
+        importScript(script);
+    } else if (typeof script === "function") {
+        script();
+    } else {
+        // Assuming script is UserScriptSourceInformation
+        const base_url = WIKIS[script.sourcewiki].url;
+        const url = new URL(base_url);
+        const ctype = script.ctype || "text/javascript";
+        url.pathname = mw.util.wikiScript("index");
+        url.searchParams.set("title", script.title);
+        url.searchParams.set("action", "raw");
+        url.searchParams.set("ctype", ctype);
+        const scriptUrl = url.toString();
+        mw.loader.load(scriptUrl, ctype);
+    }
 }
 
 /**
@@ -69,15 +87,9 @@ export function loadExternalUserScript(
     internal: boolean = false,
 ): void {
     if (!shouldLoad(record.wiki, wiki)) {
-        printWarning(name, wiki);
+        printWarning(name, wiki, internal);
         return;
     }
-    printInfo(name, wiki, record, internal);
-    if (typeof record.script === "string") {
-        importScript(record.script);
-    } else if (typeof record.script === "function") {
-        record.script();
-    } else {
-        console.warn(`Invalid script type for wiki ${wiki}:`, record.script);
-    }
+    printInfo(name, wiki, internal);
+    executeScript(record.script);
 }
