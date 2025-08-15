@@ -24,9 +24,6 @@ function addUserPageLink(link: {
     url: string;
     home?: string;
 }): void {
-    if (link === null) {
-        return;
-    }
     const label = link.type === "local"
         ? `User page at ${WIKIS[link.home || ""]?.label}`
         : "Global user page at Meta-Wiki";
