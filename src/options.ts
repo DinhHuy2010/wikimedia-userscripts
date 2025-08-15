@@ -10,51 +10,102 @@ import { onPages } from "./modules/onpages.ts";
 
 export const dhoptions: Configuration = {
     externalScripts: {
-        "XTools": { script: "mw:XTools/ArticleInfo.js", wiki: "*" }, // [[mw:XTools]]
-        "HotCat": { script: "mw:MediaWiki:Gadget-HotCat.js", wiki: "*" }, // [[w:en:Wikipedia:HotCat]]
+        "XTools": {
+            script: {
+                "sourcewiki": "mediawikiwiki",
+                "title": "XTools/ArticleInfo.js",
+            },
+            wiki: "*",
+        }, // [[mw:XTools]]
+        "HotCat": {
+            script: {
+                "sourcewiki": "mediawikiwiki",
+                "title": "MediaWiki:Gadget-HotCat.js",
+            },
+            wiki: "*",
+        }, // [[w:en:Wikipedia:HotCat]]
         "markblocked": {
-            script: "w:en:MediaWiki:Gadget-markblocked.js",
+            script: {
+                sourcewiki: "enwiki",
+                title: "MediaWiki:Gadget-markblocked.js",
+            },
             wiki: "*",
         }, // [[w:en:Special:Gadgets#gadget-markblocked]]
-        "purgetab": { script: "w:en:MediaWiki:Gadget-purgetab.js", wiki: "*" }, // [[w:en:Special:Gadgets#gadget-purgetab]]
+        "purgetab": {
+            script: {
+                sourcewiki: "enwiki",
+                title: "MediaWiki:Gadget-purgetab.js",
+            },
+            wiki: "*",
+        }, // [[w:en:Special:Gadgets#gadget-purgetab]]
         "revisionjumper": {
-            script: "w:de:MediaWiki:Gadget-revisionjumper.js",
+            script: {
+                sourcewiki: "dewiki",
+                title: "MediaWiki:Gadget-revisionjumper.js",
+            },
             wiki: "*",
         }, // [[w:en:User:DerHexer/revisionjumper]]
         "TwinkleGlobal": {
-            script: "m:User:Xiplus/TwinkleGlobal/load.js",
+            script: {
+                sourcewiki: "metawiki",
+                title: "User:Xiplus/TwinkleGlobal/load.js",
+            },
             wiki: "*",
         }, // [[m:User:Xiplus/TwinkleGlobal]]
         "exlinks": {
-            script: "w:en:MediaWiki:Gadget-exlinks.js",
+            script: {
+                sourcewiki: "enwiki",
+                title: "MediaWiki:Gadget-exlinks.js",
+            },
             wiki: "*",
         },
         "ClaimMaps": {
-            script: "d:User:Teester/ClaimMaps.js",
+            script: {
+                sourcewiki: "wikidatawiki",
+                title: "User:Teester/ClaimMaps.js",
+            },
             wiki: ["wikidatawiki"],
         },
         "DisplayColourSwatches": {
-            script: "d:User:Nikki/DisplayColourSwatches.js",
+            script: {
+                sourcewiki: "wikidatawiki",
+                title: "User:Nikki/DisplayColourSwatches.js",
+            },
             wiki: ["wikidatawiki"],
         },
         "User:Lectrician1/embeds.js": {
-            script: "d:User:Lectrician1/embeds.js",
+            script: {
+                sourcewiki: "wikidatawiki",
+                title: "User:Lectrician1/embeds.js",
+            },
             wiki: ["wikidatawiki"],
         },
         "User:Lockal/EditSum.js": {
-            script: "d:User:Lockal/EditSum.js",
+            script: {
+                sourcewiki: "wikidatawiki",
+                title: "User:Lockal/EditSum.js",
+            },
             wiki: ["wikidatawiki"],
         },
         "Ultraviolet": {
-            script: "w:en:User:10nm/beta.js",
+            script: {
+                sourcewiki: "enwiki",
+                title: "User:10nm/beta.js",
+            },
             wiki: ["enwiki"],
         },
         "CiteHighlighter": {
-            script: "w:en:User:Novem Linguae/Scripts/CiteHighlighter.js",
+            script: {
+                sourcewiki: "enwiki",
+                title: "User:Novem Linguae/Scripts/CiteHighlighter.js",
+            },
             wiki: ["enwiki"],
         },
         "sectionLinks.js": {
-            script: "w:en:User:Hilst/Scripts/sectionLinks.js",
+            script: {
+                sourcewiki: "enwiki",
+                title: "User:Hilst/Scripts/sectionLinks.js",
+            },
             wiki: ["enwiki"],
         },
     },
@@ -90,7 +141,7 @@ export const dhoptions: Configuration = {
         "enwiki-specific": {
             script: executeOnEnWiki,
             wiki: ["enwiki"],
-        }
+        },
     },
     logging: true,
 };
