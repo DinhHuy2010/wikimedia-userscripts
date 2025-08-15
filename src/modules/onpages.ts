@@ -9,6 +9,23 @@ const BASE_PAGE_PROPS_API_PARAMS: ApiQueryPagePropsParams = {
     "formatversion": "2",
 };
 
+async function isTalkPage(
+    title: string,
+    ns: number,
+): Promise<boolean> {
+    if (!isTalkNamespace(ns)) {
+        return false;
+    }
+    const p = structuredClone(BASE_PAGE_PROPS_API_PARAMS);
+    p.titles = `${ns}:${title}`;
+    p.ppprop = "nonewsectionlink";
+    const api = new mw.Api();
+    const response = await api.get(p);
+    // __NONEWSECTIONLINK__ is set for talk pages that are not discussions
+    // and thus should not have an "Add topic" button.
+    return !(response.query?.pages[0].pageprops?.nonewsectionlink === "");
+}
+
 async function isNonTalkPageIsDiscussion(
     title: string,
     ns: number,
@@ -25,7 +42,7 @@ async function isNonTalkPageIsDiscussion(
 
 async function shouldHideEditButton(): Promise<string | null> {
     const button = "#ca-edit, #ca-viewsource, #ca-ve-edit";
-    if (isTalkNamespace(NAMESPACE)) {
+    if (await isTalkPage(mw.config.get("wgTitle"), NAMESPACE)) {
         return button;
     }
     if (await isNonTalkPageIsDiscussion(mw.config.get("wgTitle"), NAMESPACE)) {
