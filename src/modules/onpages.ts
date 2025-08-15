@@ -17,7 +17,7 @@ async function isTalkPage(
         return false;
     }
     const p = structuredClone(BASE_PAGE_PROPS_API_PARAMS);
-    p.titles = `${ns}:${title}`;
+    p.titles = `${mw.config.get("wgFormattedNamespaces")[ns]}:${title}`;
     p.ppprop = "nonewsectionlink";
     const api = new mw.Api();
     const response = await api.get(p);
