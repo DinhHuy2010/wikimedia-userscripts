@@ -9,14 +9,6 @@ const BASE_PAGE_PROPS_API_PARAMS: ApiQueryPagePropsParams = {
     "formatversion": "2",
 };
 
-function hideEditButton(): void {
-    $("#ca-edit").hide();
-}
-
-function hideViewSourceButton(): void {
-    $("#ca-viewsource").hide();
-}
-
 async function isNonTalkPageIsDiscussion(
     title: string,
     ns: number,
@@ -31,10 +23,8 @@ async function isNonTalkPageIsDiscussion(
     return response.query?.pages[0].pageprops?.newsectionlink === "";
 }
 
-async function shouldHideEditButton(): Promise<"edit" | "viewsource" | null> {
-    const button = mw.config.get("wgIsProbablyEditable")
-        ? "edit"
-        : "viewsource";
+async function shouldHideEditButton(): Promise<string | null> {
+    const button = "#ca-edit, #ca-viewsource, #ca-ve-edit";
     if (isTalkNamespace(NAMESPACE)) {
         return button;
     }
@@ -45,12 +35,10 @@ async function shouldHideEditButton(): Promise<"edit" | "viewsource" | null> {
 }
 
 export function onPages(): void {
-    const buttonToHidePromise = shouldHideEditButton();
-    buttonToHidePromise.then((buttonToHide) => {
-        if (buttonToHide === "edit") {
-            hideEditButton();
-        } else if (buttonToHide === "viewsource") {
-            hideViewSourceButton();
+    const selectorPromise = shouldHideEditButton();
+    selectorPromise.then((selector) => {
+        if (selector) {
+            $(selector).hide();
         }
     });
 }
