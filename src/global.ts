@@ -19,13 +19,9 @@ import { log } from "./utils.ts";
      */
     // deno-lint-ignore no-inner-declarations
     function init(): void {
-        Object.entries(dhoptions.internalScripts)
+        Object.entries(dhoptions.scripts)
             .forEach(([name, record]) => {
                 loadExternalUserScript(DATABASE_NAME, name, record, true);
-            });
-        Object.entries(dhoptions.externalScripts)
-            .forEach(([name, record]) => {
-                loadExternalUserScript(DATABASE_NAME, name, record, false);
             });
     }
     mw.loader.using([
