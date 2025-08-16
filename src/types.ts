@@ -18,6 +18,7 @@ export type ScriptHandlerOrLocation = string | (() => void) | UserScriptSourceIn
 // If string, use importScript(<string>);
 // Else, execute the function directly.
 export type UserScriptRecord = {
+    type: "internal" | "external";
     script: ScriptHandlerOrLocation;
     wiki: WikiDBWildCardType;
 };
@@ -29,15 +30,10 @@ export type UserScriptsRecord = Record<string, UserScriptRecord>;
  */
 export interface Configuration {
     /**
-     * @description A record of user scripts.
+     * @description A record of scripts.
      * @type {UserScriptsRecord}
      */
-    externalScripts: UserScriptsRecord;
-    /**
-     * @description A record of internal scripts.
-     * @type {UserScriptsRecord}
-     */
-    internalScripts: UserScriptsRecord;
+    scripts: UserScriptsRecord;
     /**
      * @description Should logging be enabled?
      * @type {boolean}

@@ -9,8 +9,9 @@ import { initWikidata } from "./modules/users/wikidata.ts";
 import { onPages } from "./modules/onpages.ts";
 
 export const dhoptions: Configuration = {
-    externalScripts: {
+    scripts: {
         "XTools": {
+            type: "external",
             script: {
                 "sourcewiki": "mediawikiwiki",
                 "title": "XTools/ArticleInfo.js",
@@ -18,6 +19,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[mw:XTools]]
         "HotCat": {
+            type: "external",
             script: {
                 "sourcewiki": "mediawikiwiki",
                 "title": "MediaWiki:Gadget-HotCat.js",
@@ -25,6 +27,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[w:en:Wikipedia:HotCat]]
         "markblocked": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-markblocked.js",
@@ -32,6 +35,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[w:en:Special:Gadgets#gadget-markblocked]]
         "purgetab": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-purgetab.js",
@@ -39,6 +43,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[w:en:Special:Gadgets#gadget-purgetab]]
         "revisionjumper": {
+            type: "external",
             script: {
                 sourcewiki: "dewiki",
                 title: "MediaWiki:Gadget-revisionjumper.js",
@@ -46,6 +51,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[w:en:User:DerHexer/revisionjumper]]
         "TwinkleGlobal": {
+            type: "external",
             script: {
                 sourcewiki: "metawiki",
                 title: "User:Xiplus/TwinkleGlobal/load.js",
@@ -53,6 +59,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         }, // [[m:User:Xiplus/TwinkleGlobal]]
         "exlinks": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-exlinks.js",
@@ -60,6 +67,7 @@ export const dhoptions: Configuration = {
             wiki: "*",
         },
         "ClaimMaps": {
+            type: "external",
             script: {
                 sourcewiki: "wikidatawiki",
                 title: "User:Teester/ClaimMaps.js",
@@ -67,6 +75,7 @@ export const dhoptions: Configuration = {
             wiki: ["wikidatawiki"],
         },
         "DisplayColourSwatches": {
+            type: "external",
             script: {
                 sourcewiki: "wikidatawiki",
                 title: "User:Nikki/DisplayColourSwatches.js",
@@ -74,6 +83,7 @@ export const dhoptions: Configuration = {
             wiki: ["wikidatawiki"],
         },
         "User:Lectrician1/embeds.js": {
+            type: "external",
             script: {
                 sourcewiki: "wikidatawiki",
                 title: "User:Lectrician1/embeds.js",
@@ -81,6 +91,7 @@ export const dhoptions: Configuration = {
             wiki: ["wikidatawiki"],
         },
         "User:Lockal/EditSum.js": {
+            type: "external",
             script: {
                 sourcewiki: "wikidatawiki",
                 title: "User:Lockal/EditSum.js",
@@ -88,6 +99,7 @@ export const dhoptions: Configuration = {
             wiki: ["wikidatawiki"],
         },
         "Ultraviolet": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "User:10nm/beta.js",
@@ -95,6 +107,7 @@ export const dhoptions: Configuration = {
             wiki: ["enwiki"],
         },
         "CiteHighlighter": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "User:Novem Linguae/Scripts/CiteHighlighter.js",
@@ -102,6 +115,7 @@ export const dhoptions: Configuration = {
             wiki: ["enwiki"],
         },
         "sectionLinks.js": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "User:Hilst/Scripts/sectionLinks.js",
@@ -109,6 +123,7 @@ export const dhoptions: Configuration = {
             wiki: ["enwiki"],
         },
         "RTRC": {
+            type: "external",
             script: () => {
                 // Copied from https://meta.wikimedia.org/w/index.php?title=User:Krinkle/Tools/Real-Time_Recent_Changes&oldid=28838081
                 // [[File:Krinkle_RTRC.js]]
@@ -122,43 +137,51 @@ export const dhoptions: Configuration = {
             "wiki": ["wikidatawiki", "commonswiki"],
         },
         "MoveToDraft": {
+            type: "external",
             script: {
                 sourcewiki: "enwiki",
                 title: "User:MPGuy2824/MoveToDraft.js",
             },
             wiki: ["enwiki"],
-        }
-    },
-    internalScripts: {
+        },
+        // Internal scripts
         "CascadiaMonoLoader": {
+            type: "internal",
             script: loadCascadiaMonoFont,
             wiki: "*",
         },
         "changeTalktoDiscussion": {
+            type: "internal",
             script: changeTalktoDiscussion,
             wiki: ["enwiki"],
         },
         "setDisambiguationLabel": {
+            type: "internal",
             script: setDisambiguationLabel,
             wiki: "*",
         },
         "addCaPortlet": {
+            type: "internal",
             script: addCaPortlet,
             wiki: "*",
         },
         "users-wikidata": {
+            type: "internal",
             script: initWikidata,
             wiki: "*",
         },
         "hide-editbutton-discussion": {
+            type: "internal",
             script: onPages,
             "wiki": "*",
         },
         "forcetagineshow": {
+            type: "internal",
             script: executeToEnforce,
             "wiki": "*",
         },
         "enwiki-specific": {
+            type: "internal",
             script: executeOnEnWiki,
             wiki: ["enwiki"],
         },
