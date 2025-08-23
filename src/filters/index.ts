@@ -49,6 +49,17 @@ export function validOnAnything(): FilterType {
 }
 
 /**
+ * @description A filter that use a custom function.
+ * @param {() => boolean} func - The custom function to use for filtering.
+ * @returns {FilterType} A filter that uses the provided function.
+ */
+export function filterCustom(func: () => boolean): FilterType {
+    return {
+        checkAgainstFilter: func,
+    };
+}
+
+/**
  * @description Either one of the provided filters must match.
  * @param {FilterType[]} filters - An array of filters to check against.
  * @returns {FilterType} A filter that matches if any of the provided filters match.
