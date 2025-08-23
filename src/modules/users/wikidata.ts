@@ -1,4 +1,4 @@
-import { NAMESPACE } from "../../constants.ts";
+import { NAMESPACE, WIKIS } from "../../constants.ts";
 import { toContentNamespace } from "../../utils.ts";
 
 const PORTLET_ID = "p-dhuserinotherprojects";
@@ -38,6 +38,55 @@ function initPortlet(): void {
     );
 }
 
+async function getSitelinks(qid: string): Promise<{
+    [key: string]: {
+        site: string;
+        title: string;
+        badges: string[];
+    };
+}> {
+    const api = new mw.ForeignApi("https://www.wikidata.org/w/api.php");
+    const params = {
+        action: "wbgetentities",
+        ids: qid,
+        format: "json",
+        props: "sitelinks",
+        formatversion: "2",
+    };
+    const response = await api.get(params);
+    return response?.entities?.[qid]?.sitelinks || null;
+}
+
+async function addLinks(qid: string): Promise<void> {
+    const sitelinks = await getSitelinks(qid);
+    if (!sitelinks) {
+        return; // No sitelinks found
+    }
+    Object.values(sitelinks).forEach((link) => {
+        const site = link.site;
+        const title = link.title;
+        const url = new URL(WIKIS[site].url);
+        url.pathname = `/wiki/${mw.util.wikiUrlencode(title)}`;
+        mw.util.addPortletLink(
+            PORTLET_ID,
+            url.toString(),
+            WIKIS[site].label,
+            `${PORTLET_ID}-wd-${site}`,
+            `Link to user's page on ${WIKIS[site].label}`,
+        );
+    });
+    const wikidataLink =
+        `https://www.wikidata.org/wiki/Special:EntityPage/${qid}`;
+    mw.util.addPortletLink(
+        PORTLET_ID,
+        wikidataLink,
+        "Wikidata item",
+        `${PORTLET_ID}-wd-item`,
+        "Link to user's linked Wikidata item",
+        "g",
+    );
+}
+
 export function initWikidata(): void {
     if (toContentNamespace(NAMESPACE) !== 2) {
         return; // Not a user page
@@ -46,16 +95,7 @@ export function initWikidata(): void {
     const username = mw.config.get("wgTitle").split("/")[0];
     getWikidataItem(username).then((qid) => {
         if (qid) {
-            const wikidataLink =
-                `https://www.wikidata.org/wiki/Special:EntityPage/${qid}`;
-            mw.util.addPortletLink(
-                PORTLET_ID,
-                wikidataLink,
-                "Wikidata item",
-                `${PORTLET_ID}-wd-item`,
-                "Link to user's linked Wikidata item",
-                "g",
-            );
+            addLinks(qid);
         }
     });
 }
