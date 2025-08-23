@@ -4,6 +4,7 @@ import type {
     ApiQueryParams,
     CentralAuthApiQueryGlobalUserInfoParams,
 } from "types-mediawiki/api_params";
+import { FilterType } from "./filters/index.ts";
 
 export type WikiDBWildCardType = string | string[] | RegExp;
 type UserScriptSourceInformation = {
@@ -20,7 +21,7 @@ export type ScriptHandlerOrLocation = string | (() => void) | UserScriptSourceIn
 export type UserScriptRecord = {
     type: "internal" | "external";
     script: ScriptHandlerOrLocation;
-    wiki: WikiDBWildCardType;
+    filter: FilterType;
 };
 export type UserScriptsRecord = Record<string, UserScriptRecord>;
 

@@ -7,6 +7,7 @@ import { setDisambiguationLabel } from "./modules/disambiguation.ts";
 import { addCaPortlet } from "./modules/users/ca-portlet-link.ts";
 import { initWikidata } from "./modules/users/wikidata.ts";
 import { onPages } from "./modules/onpages.ts";
+import { validOnAnything, validOnWiki } from "./filters/index.ts";
 
 export const dhoptions: Configuration = {
     scripts: {
@@ -16,7 +17,7 @@ export const dhoptions: Configuration = {
                 "sourcewiki": "mediawikiwiki",
                 "title": "XTools/ArticleInfo.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[mw:XTools]]
         "HotCat": {
             type: "external",
@@ -24,7 +25,7 @@ export const dhoptions: Configuration = {
                 "sourcewiki": "mediawikiwiki",
                 "title": "MediaWiki:Gadget-HotCat.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[w:en:Wikipedia:HotCat]]
         "markblocked": {
             type: "external",
@@ -32,7 +33,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-markblocked.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[w:en:Special:Gadgets#gadget-markblocked]]
         "purgetab": {
             type: "external",
@@ -40,7 +41,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-purgetab.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[w:en:Special:Gadgets#gadget-purgetab]]
         "revisionjumper": {
             type: "external",
@@ -48,7 +49,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "dewiki",
                 title: "MediaWiki:Gadget-revisionjumper.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[w:en:User:DerHexer/revisionjumper]]
         "TwinkleGlobal": {
             type: "external",
@@ -56,7 +57,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "metawiki",
                 title: "User:Xiplus/TwinkleGlobal/load.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         }, // [[m:User:Xiplus/TwinkleGlobal]]
         "exlinks": {
             type: "external",
@@ -64,7 +65,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "MediaWiki:Gadget-exlinks.js",
             },
-            wiki: "*",
+            filter: validOnAnything(),
         },
         "ClaimMaps": {
             type: "external",
@@ -72,7 +73,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "wikidatawiki",
                 title: "User:Teester/ClaimMaps.js",
             },
-            wiki: ["wikidatawiki"],
+            filter: validOnWiki("wikidatawiki"),
         },
         "DisplayColourSwatches": {
             type: "external",
@@ -80,7 +81,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "wikidatawiki",
                 title: "User:Nikki/DisplayColourSwatches.js",
             },
-            wiki: ["wikidatawiki"],
+            filter: validOnWiki("wikidatawiki"),
         },
         "User:Lectrician1/embeds.js": {
             type: "external",
@@ -88,7 +89,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "wikidatawiki",
                 title: "User:Lectrician1/embeds.js",
             },
-            wiki: ["wikidatawiki"],
+            filter: validOnWiki("wikidatawiki"),
         },
         "User:Lockal/EditSum.js": {
             type: "external",
@@ -96,7 +97,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "wikidatawiki",
                 title: "User:Lockal/EditSum.js",
             },
-            wiki: ["wikidatawiki"],
+            filter: validOnWiki("wikidatawiki"),
         },
         "Ultraviolet": {
             type: "external",
@@ -104,7 +105,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "User:10nm/beta.js",
             },
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
         "CiteHighlighter": {
             type: "external",
@@ -112,7 +113,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "User:Novem Linguae/Scripts/CiteHighlighter.js",
             },
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
         "sectionLinks.js": {
             type: "external",
@@ -120,7 +121,7 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "User:Hilst/Scripts/sectionLinks.js",
             },
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
         "RTRC": {
             type: "external",
@@ -134,7 +135,7 @@ export const dhoptions: Configuration = {
                             mw.config.get("wgUserLanguage", "en"),
                     );
             },
-            "wiki": ["wikidatawiki", "commonswiki"],
+            filter: validOnWiki(["wikidatawiki", "commonswiki"]),
         },
         "MoveToDraft": {
             type: "external",
@@ -142,48 +143,48 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "User:MPGuy2824/MoveToDraft.js",
             },
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
         // Internal scripts
         "CascadiaMonoLoader": {
             type: "internal",
             script: loadCascadiaMonoFont,
-            wiki: "*",
+            filter: validOnAnything(),
         },
         "changeTalktoDiscussion": {
             type: "internal",
             script: changeTalktoDiscussion,
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
         "setDisambiguationLabel": {
             type: "internal",
             script: setDisambiguationLabel,
-            wiki: "*",
+            filter: validOnAnything(),
         },
         "addCaPortlet": {
             type: "internal",
             script: addCaPortlet,
-            wiki: "*",
+            filter: validOnAnything(),
         },
         "users-wikidata": {
             type: "internal",
             script: initWikidata,
-            wiki: "*",
+            filter: validOnAnything(),
         },
         "hide-editbutton-discussion": {
             type: "internal",
             script: onPages,
-            "wiki": "*",
+            filter: validOnAnything(),
         },
         "forcetagineshow": {
             type: "internal",
             script: executeToEnforce,
-            "wiki": "*",
+            filter: validOnAnything(),
         },
         "enwiki-specific": {
             type: "internal",
             script: executeOnEnWiki,
-            wiki: ["enwiki"],
+            filter: validOnWiki("enwiki"),
         },
     },
     logging: true,
