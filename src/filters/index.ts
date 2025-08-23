@@ -3,9 +3,10 @@
  * @public
  */
 
-import { NAMESPACE } from "../constants.ts";
+import { NAMESPACE, WIKIS } from "../constants.ts";
 import {
-isInMainPage,
+    isInMainPage,
+    isOnMobileView,
     isTalkNamespace,
     toContentNamespace,
     toTalkNamespace,
@@ -135,6 +136,32 @@ export function validOnWiki(
 }
 
 /**
+ * @description A filter that matches on multlingual wikis.
+ * @returns {WikiDBFilterType} A filter that matches on multilingual wikis.
+ */
+export function validOnMultilingualWikis(): WikiDBFilterType {
+    return validOnWiki([
+        "mediawikiwiki",
+        "metawiki",
+        "commonswiki",
+        "specieswiki",
+        "wikidatawiki",
+    ]);
+}
+
+/**
+ * @description A filter that matches on a specific wiki groups.
+ * @param {string} group - The wiki group to match against. Supported groups: "wikipedia", "wiktionary", "wikibooks", "wikinews", "wikiquote", "wikisource", "wikiversity", "wikivoyage", "wikimedia", "multilingual".
+ * @returns {WikiDBFilterType} A filter that matches on the specified wiki group.
+ */
+export function validOnWikiGroup(group: string): WikiDBFilterType {
+    const dbs = Object.entries(WIKIS).filter(
+        ([_, info]) => info.group === group,
+    ).map(([dbname, _]) => dbname);
+    return validOnWiki(dbs);
+}
+
+/**
  * @description A filter that matches on the wiki page' namespace.
  * @param {number | number[]} ns - The namespace number(s) to match against.
  * @param {boolean} [includeAssociated=false] - Whether to include associated talk/content namespaces.
@@ -219,5 +246,15 @@ export function validOnSkin(
 export function vaildOnMainPage(): FilterType {
     return {
         checkAgainstFilter: () => isInMainPage(),
+    };
+}
+
+/**
+ * @description A filter that matches if the current page is running on mobile view.
+ * @returns {FilterType} A filter that matches if the current page is running on mobile view.
+ */
+export function validOnMobileView(): FilterType {
+    return {
+        checkAgainstFilter: () => isOnMobileView(),
     };
 }
