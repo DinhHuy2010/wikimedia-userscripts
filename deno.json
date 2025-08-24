@@ -26,10 +26,5 @@
             "deno.window"
         ]
     },
-    "lint": {
-        "rules": {
-            "no-explicit-any": "off"
-        }
-    },
     "license": "CC-BY-4.0 OR MIT"
 }
