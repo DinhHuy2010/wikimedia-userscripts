@@ -5,5 +5,8 @@ export async function fetchWDQS(sparqlQuery: string): Promise<any> {
         encodeURIComponent(sparqlQuery);
     const headers = { "Accept": "application/sparql-results+json" };
     const response = await fetch(fullUrl, { headers });
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+    }
     return response.json();
 }

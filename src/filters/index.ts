@@ -254,7 +254,7 @@ export function validOnSkin(
  * @description A filter that matches if the current page is the main page.
  * @returns {FilterType} A filter that matches if the current page is the main page.
  */
-export function vaildOnMainPage(): FilterType {
+export function validOnMainPage(): FilterType {
     return {
         checkAgainstFilter: () => isInMainPage(),
     };
