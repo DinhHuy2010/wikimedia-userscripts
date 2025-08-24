@@ -7,7 +7,13 @@ import { setDisambiguationLabel } from "./modules/disambiguation.ts";
 import { addCaPortlet } from "./modules/users/ca-portlet-link.ts";
 import { initWikidata } from "./modules/users/wikidata.ts";
 import { onPages } from "./modules/onpages.ts";
-import { validOnAnything, validOnWiki } from "./filters/index.ts";
+import {
+    filterAnd,
+    filterNot,
+    validOnAnything,
+    validOnMainPage,
+    validOnWiki,
+} from "./filters/index.ts";
 
 export const dhoptions: Configuration = {
     scripts: {
@@ -105,7 +111,10 @@ export const dhoptions: Configuration = {
                 sourcewiki: "enwiki",
                 title: "User:10nm/beta.js",
             },
-            filter: validOnWiki("enwiki"),
+            filter: filterAnd([
+                validOnWiki("enwiki"),
+                filterNot(validOnMainPage()),
+            ]),
         },
         "CiteHighlighter": {
             type: "external",

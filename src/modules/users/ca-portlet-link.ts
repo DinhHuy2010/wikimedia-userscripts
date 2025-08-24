@@ -97,7 +97,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
                 url: `https://meta.wikimedia.org/wiki/User:${username}`,
             });
         }
-        if (DATABASE_NAME !== home) {
+        if (DATABASE_NAME !== home && home !== "metawiki") {
             // Not in home wiki, add local link if it exists
             if (doesLocalPageExist) {
                 links.push({
