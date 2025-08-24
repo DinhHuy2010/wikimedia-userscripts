@@ -1,8 +1,8 @@
 import { WIKIS } from "../constants.ts";
+import { FilterType } from "../filters/index.ts";
 import type {
     ScriptHandlerOrLocation,
     UserScriptRecord,
-    WikiDBWildCardType,
 } from "../types.ts";
 import { log, warn } from "../utils.ts";
 
@@ -13,17 +13,8 @@ import { log, warn } from "../utils.ts";
  * @param wiki {string} - The wiki to check.
  * @returns {boolean} - Whether the script should be loaded.
  */
-function shouldLoad(wildcard: WikiDBWildCardType, wiki: string): boolean {
-    if (wildcard === "*") {
-        return true;
-    } else if (Array.isArray(wildcard)) {
-        return wildcard.includes(wiki);
-    } else if (typeof wildcard === "string") {
-        return wildcard === wiki;
-    } else if (wildcard instanceof RegExp) {
-        return wildcard.test(wiki);
-    }
-    return false;
+function shouldLoad(filter: FilterType): boolean {
+    return filter.checkAgainstFilter();
 }
 
 /**
@@ -86,7 +77,7 @@ export function loadExternalUserScript(
     record: UserScriptRecord,
     internal: boolean = false,
 ): void {
-    if (!shouldLoad(record.wiki, wiki)) {
+    if (!shouldLoad(record.filter)) {
         printWarning(name, wiki, internal);
         return;
     }
