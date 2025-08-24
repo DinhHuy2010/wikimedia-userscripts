@@ -1,57 +1,73 @@
 import { Mwn } from "mwn";
+import { Wikis } from "../src/types.ts";
+import _wikis from "../src/wikis.json" with { type: "json" };
+
+const WIKIS = _wikis as Wikis;
 
 const WIKIMEDIA_USERNAME = Deno.env.get("WIKIMEDIA_USERNAME");
 const WIKIMEDIA_PASSWORD = Deno.env.get("WIKIMEDIA_PASSWORD");
 const USER_AGENT =
     `DinhHuy2010/wikimedia-userscripts Deno/${Deno.version.deno}`;
-const TARGET_JS_PAGE = "User:DinhHuy2010/global.js";
-const TARGET_CSS_PAGE = "User:DinhHuy2010/global.css";
 
-if (!WIKIMEDIA_USERNAME || !WIKIMEDIA_PASSWORD) {
-    console.error(
-        "WIKIMEDIA_USERNAME and WIKIMEDIA_PASSWORD must be set in the environment.",
-    );
-    Deno.exit(1);
+async function loadConfig() {
+    const module = await import("../config.ts");
+    return module.config;
 }
+const conf = await loadConfig();
+type BuildTarget = typeof conf.buildTargets[0];
 
-/**
- * Get the content of the global.js and global.css from build directory.
- * @returns {[string, string]}
- */
-function getContents(): [string, string] {
-    const css = Deno.readTextFileSync("build/global.css");
-    const js = Deno.readTextFileSync("build/global.js");
-    return [css, js];
-}
-
-function createEditSummary(page: string) {
+function createEditSummary(page: string): string {
     return `Update ${page} from wikimedia-userscripts repository`;
 }
 
-async function publish(wp: Mwn, page: string, content: string): Promise<void> {
-    const editsummary = createEditSummary(page);
-    console.log(`Updating ${page}...`);
-    const response = await wp.save(page, content, editsummary);
-    const nochange = response.nochange || false;
-    if (nochange) {
-        console.log(`No changes made to ${page}.`);
+async function publishFromBuildTarget(target: BuildTarget) {
+    let blob: string;
+    try {
+        blob = await Deno.readTextFile(target.expectedOutputLocation);
+    } catch (error) {
+        console.error(
+            `Error reading file at ${target.expectedOutputLocation}:`,
+            error,
+            " Maybe the file doesn't exist?",
+        );
         return;
     }
-    console.log("Update complete.");
-    console.log(`Result: ${response.result}`);
-    console.log(`Revision ID: ${response.newrevid}`);
+    const apiUrl = new URL(WIKIS[target.targetwiki].url);
+    apiUrl.pathname = "/w/api.php";
+    const mwn = await Mwn.init({
+        apiUrl: apiUrl.toString(),
+        userAgent: USER_AGENT,
+        username: WIKIMEDIA_USERNAME,
+        password: WIKIMEDIA_PASSWORD,
+    });
+    return mwn.save(
+        target.targetpage,
+        blob,
+        createEditSummary(target.name),
+    );
 }
 
 async function main(): Promise<void> {
-    const wp = await Mwn.init({
-        apiUrl: "https://meta.wikimedia.org/w/api.php",
-        username: WIKIMEDIA_USERNAME,
-        password: WIKIMEDIA_PASSWORD,
-        userAgent: USER_AGENT,
-    });
-    const [css, js] = getContents();
-    await publish(wp, TARGET_CSS_PAGE, css);
-    await publish(wp, TARGET_JS_PAGE, js);
+    if (!WIKIMEDIA_USERNAME || !WIKIMEDIA_PASSWORD) {
+        console.error(
+            "WIKIMEDIA_USERNAME and WIKIMEDIA_PASSWORD must be set in the environment.",
+        );
+        Deno.exit(1);
+    }
+    const promises = conf.buildTargets.map((target) =>
+        publishFromBuildTarget(target).then(
+            (response) => {
+                if (response?.nochange) {
+                    console.log(`No changes made to ${target.name}`);
+                } else {
+                    console.log("Update complete.");
+                    console.log(`Result: ${response?.result}`);
+                    console.log(`New revision ID: ${response?.newrevid}`);
+                }
+            },
+        )
+    );
+    await Promise.all(promises);
     console.log("All updates completed.");
 }
 
