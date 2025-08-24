@@ -1,4 +1,5 @@
-export async function fetchWDQS(sparqlQuery: string): Promise<unknown> {
+// deno-lint-ignore no-explicit-any
+export async function fetchWDQS(sparqlQuery: string): Promise<any> {
     const endpoint = "https://query.wikidata.org/sparql";
     const fullUrl = endpoint + "?query=" +
         encodeURIComponent(sparqlQuery);

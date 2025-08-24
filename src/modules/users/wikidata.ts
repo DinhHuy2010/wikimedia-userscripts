@@ -1,5 +1,6 @@
 import { NAMESPACE, WIKIS } from "../../constants.ts";
 import { toContentNamespace } from "../../utils.ts";
+import { fetchWDQS } from "../../wikidata/sparql.ts";
 
 const PORTLET_ID = "p-dhuserinotherprojects";
 
@@ -8,14 +9,7 @@ async function getWikidataItem(username: string): Promise<string | null> {
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 SELECT ?item WHERE { ?item wdt:P4174 "${username}". }
 LIMIT 1`;
-    const url = new URL("https://query.wikidata.org/sparql");
-    url.searchParams.append("query", sparql);
-    const response = await fetch(url, {
-        headers: {
-            "Accept": "application/sparql-results+json",
-        },
-    });
-    const data = await response.json();
+    const data = await fetchWDQS(sparql);
     if (data.results.bindings.length === 0) {
         return null; // No item found
     }

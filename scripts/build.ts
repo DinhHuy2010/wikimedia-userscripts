@@ -28,7 +28,7 @@ function main(): void {
         outdir: "./build",
         banner: { js: HEADER_JS, css: HEADER_CSS },
         legalComments: "none",
-        target: ["es2017"],
+        target: ["es6"],
     });
 }
 if (import.meta.main) {
