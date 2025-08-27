@@ -42,7 +42,7 @@ export interface Configuration {
     logging: boolean;
 }
 
-interface WikiInfo {
+export interface WikiInfo {
     /**
      * @description Name of this wiki instance
      * @type {string}
