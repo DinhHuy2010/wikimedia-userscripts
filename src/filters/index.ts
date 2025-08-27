@@ -3,7 +3,7 @@
  * @public
  */
 
-import { NAMESPACE, WIKIS } from "../constants.ts";
+import { NAMESPACE } from "../constants.ts";
 import {
     isInMainPage,
     isOnMobileView,
@@ -11,6 +11,7 @@ import {
     toContentNamespace,
     toTalkNamespace,
 } from "../utils.ts";
+import { getDatabasesSync } from "../wikis.ts";
 
 export interface FilterType {
     checkAgainstFilter(): boolean;
@@ -162,13 +163,11 @@ export function validOnMultilingualWikis(): WikiDBFilterType {
 
 /**
  * @description A filter that matches on a specific wiki groups.
- * @param {string} group - The wiki group to match against. Supported groups: "wikipedia", "wiktionary", "wikibooks", "wikinews", "wikiquote", "wikisource", "wikiversity", "wikivoyage", "wikimedia", "multilingual".
+ * @param {string} group - The wiki group to match against. Supported groups: "wiki", "wiktionary", "wikibooks", etc.
  * @returns {WikiDBFilterType} A filter that matches on the specified wiki group.
  */
 export function validOnWikiGroup(group: string): WikiDBFilterType {
-    const dbs = Object.entries(WIKIS).filter(
-        ([_, info]) => info.group === group,
-    ).map(([dbname, _]) => dbname);
+    const dbs = getDatabasesSync({ group });
     return validOnWiki(dbs);
 }
 

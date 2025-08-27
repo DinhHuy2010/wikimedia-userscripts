@@ -1,6 +1,6 @@
 import { Mwn } from "mwn";
 import { Wikis } from "../src/types.ts";
-import _wikis from "../src/wikis.json" with { type: "json" };
+import _wikis from "../data/wikis.json" with { type: "json" };
 
 const WIKIS = _wikis as Wikis;
 

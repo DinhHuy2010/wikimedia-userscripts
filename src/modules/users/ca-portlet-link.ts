@@ -2,7 +2,7 @@ import { toContentNamespace, warn } from "../../utils.ts";
 import { extractGlobalUserInfo } from "./utils.ts";
 import { ApiQueryParams } from "../../types.ts";
 import { DATABASE_NAME, NAMESPACE } from "../../constants.ts";
-import { WIKIS } from "../../constants.ts";
+import { getWikiInfoSync } from "../../wikis.ts";
 
 function addCentralAuthLink(username: string): void {
     const caLink = `https://meta.wikimedia.org/wiki/${
@@ -25,7 +25,7 @@ function addUserPageLink(link: {
     home?: string;
 }): void {
     const label = link.type === "local"
-        ? `User page at ${WIKIS[link.home || ""]?.label}`
+        ? `User page at ${getWikiInfoSync(link.home || "metawiki")?.label || "????"}`
         : "Global user page at Meta-Wiki";
     const tooltip = link.type === "local"
         ? `View this user page at this user's home wiki`
@@ -54,7 +54,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
         "formatversion": "2",
         "titles": "User:" + username,
     };
-    const base_url = WIKIS[home]?.url;
+    const base_url = getWikiInfoSync(home)?.url;
     async function doesNotHaveLocalPage(url: string): Promise<boolean> {
         const f = new mw.ForeignApi(`${url}w/api.php`);
         const out = await f.get(p);
@@ -83,7 +83,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
     } else {
         // Not in Meta-Wiki
         const doesLocalPageExist =
-            !(await doesNotHaveLocalPage(WIKIS[home]?.url || ""));
+            !(await doesNotHaveLocalPage(base_url || ""));
         const doesMetaPageExist =
             !(await doesNotHaveLocalPage("https://meta.wikimedia.org/"));
         const links: {

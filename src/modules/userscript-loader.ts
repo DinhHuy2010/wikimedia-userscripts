@@ -1,10 +1,10 @@
-import { WIKIS } from "../constants.ts";
 import { FilterType } from "../filters/index.ts";
 import type {
     ScriptHandlerOrLocation,
     UserScriptRecord,
 } from "../types.ts";
 import { log, warn } from "../utils.ts";
+import { getWikiInfoSync } from "../wikis.ts";
 
 /**
  * @description Check if a user script should be loaded based on the wiki and wildcard.
@@ -52,7 +52,11 @@ function executeScript(script: ScriptHandlerOrLocation) {
         script();
     } else {
         // Assuming script is UserScriptSourceInformation
-        const base_url = WIKIS[script.sourcewiki].url;
+        const base_url = getWikiInfoSync(script.sourcewiki)?.url;
+        if (!base_url) {
+            warn(`No base URL found for ${script.sourcewiki}.`);
+            return;
+        }
         const url = new URL(base_url);
         const ctype = script.ctype || "text/javascript";
         url.pathname = mw.util.wikiScript("index");
