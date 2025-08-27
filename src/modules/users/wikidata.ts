@@ -56,6 +56,16 @@ async function addLinks(qid: string): Promise<void> {
     if (!sitelinks) {
         return; // No sitelinks found
     }
+    const wikidataLink =
+        `https://www.wikidata.org/wiki/Special:EntityPage/${qid}`;
+    mw.util.addPortletLink(
+        PORTLET_ID,
+        wikidataLink,
+        "Wikidata item",
+        `${PORTLET_ID}-wd-item`,
+        "Link to user's linked Wikidata item",
+        "g",
+    );
     Object.values(sitelinks).forEach((link) => {
         const site = link.site;
         const title = link.title;
@@ -69,16 +79,6 @@ async function addLinks(qid: string): Promise<void> {
             `Link to user's page on ${WIKIS[site].label}`,
         );
     });
-    const wikidataLink =
-        `https://www.wikidata.org/wiki/Special:EntityPage/${qid}`;
-    mw.util.addPortletLink(
-        PORTLET_ID,
-        wikidataLink,
-        "Wikidata item",
-        `${PORTLET_ID}-wd-item`,
-        "Link to user's linked Wikidata item",
-        "g",
-    );
 }
 
 export function initWikidata(): void {
