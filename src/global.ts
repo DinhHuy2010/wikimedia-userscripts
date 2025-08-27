@@ -28,6 +28,7 @@ import { log } from "./utils.ts";
         "mediawiki.util",
         "mediawiki.api",
         "mediawiki.Title",
+        "mediawiki.storage"
     ], init);
     log("Userscripts loaded successfully.");
 }

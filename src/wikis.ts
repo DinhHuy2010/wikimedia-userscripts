@@ -1,29 +1,45 @@
 import { WikiInfo, Wikis } from "./types.ts";
+import { warn } from "./utils.ts";
 
 interface WikiFilter {
     group?: string;
 }
 
-let _cached: Wikis | null = null;
+const CACHE_KEY = "mw-dhscript-allwikisinfo";
 const url = new URL(
     "https://raw.githubusercontent.com/DinhHuy2010/wikimedia-userscripts/main/data/wikis.json",
 );
 
 export async function getWikis(opts?: WikiFilter): Promise<Wikis> {
-    if (_cached !== null) return _cached;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to fetch wikis.json");
-    const data: Wikis = await res.json();
-    _cached = data;
+    let o = mw.storage.get(CACHE_KEY) as string | null | false;
+    let d: Wikis;
+    if (o === false) {
+        warn("Storage is disabled!");
+        o = null;
+    }
+    if (typeof o === "string") {
+        d = JSON.parse(o) as Wikis;
+    } else {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Failed to fetch wikis.json: ${res.status}`);
+        }
+        o = await res.text();
+        try {
+            d = JSON.parse(o);
+        } catch (_) {
+            throw new Error("Invalid JSON in wikis.json");
+        }
+        mw.storage.set(CACHE_KEY, o, 86400);
+    }
     if (opts?.group) {
-        const filtered: Wikis = Object.fromEntries(
-            Object.entries(data).filter(([_, info]) =>
+        return Object.fromEntries(
+            Object.entries(d).filter(([_, info]) =>
                 info.group === opts.group
             ),
         );
-        return filtered;
     }
-    return data;
+    return d;
 }
 
 export async function getDatabases(opts?: WikiFilter): Promise<string[]> {
