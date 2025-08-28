@@ -36,55 +36,54 @@ function setsiteSub(html: string): void {
     $(SITESUB_SELECTOR).html(html);
 }
 
-function setsiteSubbyWikitext(wikitext: string): void {
-    renderWikitext(wikitext)
-        .then((html) => {
-            setsiteSub(html);
-        })
-        .catch((err) => {
-            error(`Error rendering wikitext: ${err}`);
-        })
-        .finally(() => {
-            log("siteSub set by wikitext.");
-        });
+async function setsiteSubbyWikitext(wikitext: string): Promise<void> {
+    try {
+        const html = await renderWikitext(wikitext);
+        setsiteSub(html);
+    } catch (err) {
+        error(`Error rendering wikitext: ${err}`);
+    } finally {
+        log("siteSub set by wikitext.");
+    }
 }
 
-export function setsiteSubByStatus(
+export async function setsiteSubByStatus(
     siteSub: {
         status: SiteSubEnum;
         wikitext?: string;
     },
-): void {
+): Promise<SiteSubEnum> {
     log("Setting siteSub by status...");
     const { status, wikitext } = siteSub;
     switch (status) {
         case SiteSubEnum.USE_DEFAULT:
             // Do nothing, use the default siteSub options
             log("Using default siteSub options, doing nothing...");
-            return;
+            return Promise.resolve(SiteSubEnum.USE_DEFAULT);
         case SiteSubEnum.HIDE:
             hidesiteSub();
-            return;
+            return Promise.resolve(SiteSubEnum.HIDE);
         case SiteSubEnum.SHOW:
             showsiteSub();
-            return;
+            return Promise.resolve(SiteSubEnum.SHOW);
         case SiteSubEnum.USE_CUSTOM:
             if (wikitext) {
                 log("Using custom siteSub wikitext...");
-                setsiteSubbyWikitext(wikitext);
+                await setsiteSubbyWikitext(wikitext);
+                return Promise.resolve(SiteSubEnum.USE_CUSTOM);
             } else {
                 log("No wikitext provided for custom siteSub, doing nothing...");
+                return Promise.resolve(SiteSubEnum.USE_DEFAULT);
             }
-            return;
         default:
-            log(`Unknown siteSub status: ${status}`);
-            return;
+            log(`Unknown siteSub status: ${status}, doing nothing...`);
+            return Promise.resolve(SiteSubEnum.USE_DEFAULT);
     }
 }
 
-export function setsiteSubByPredicate(
-    predicate: () => { status: SiteSubEnum; wikitext?: string },
-): void {
-    const o = predicate();
-    setsiteSubByStatus(o);
+export async function setsiteSubByPredicate(
+    predicate: () => { status: SiteSubEnum; wikitext?: string } | Promise<{ status: SiteSubEnum; wikitext?: string }>,
+): Promise<void> {
+    const o = await predicate();
+    await setsiteSubByStatus(o);
 }

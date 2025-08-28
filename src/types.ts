@@ -13,7 +13,7 @@ type UserScriptSourceInformation = {
     ctype?: "text/javascript" | "text/css";
 }
 
-export type ScriptHandlerOrLocation = string | (() => void) | UserScriptSourceInformation;
+export type ScriptHandlerOrLocation = string | (() => void | Promise<void>) | UserScriptSourceInformation;
 
 // {<string>: {script: <string> | <function>, wiki: <wiki>}}
 // If string, use importScript(<string>);

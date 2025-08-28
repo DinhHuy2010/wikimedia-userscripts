@@ -17,16 +17,13 @@ async function isPageDisambiguation(
     return isDisambig;
 }
 
-export function setDisambiguationLabel(): void {
-    isPageDisambiguation(
+export async function setDisambiguationLabel(): Promise<void> {
+    const isDisambig = await isPageDisambiguation(
         mw.config.get("wgTitle"),
         NAMESPACE,
-    ).then(
-        (isDisambig) => {
-            if (isDisambig) {
-                log("Setting disambiguation label for the current tab...");
-                setTabLabel("Disambiguation page");
-            }
-        },
     );
+    if (isDisambig) {
+        log("Setting disambiguation label for the current tab...");
+        setTabLabel("Disambiguation page");
+    }
 }

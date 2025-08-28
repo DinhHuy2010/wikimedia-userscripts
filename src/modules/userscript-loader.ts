@@ -4,7 +4,7 @@ import type {
     UserScriptRecord,
 } from "../types.ts";
 import { log, warn } from "../utils.ts";
-import { getWikiInfoSync } from "../wikis.ts";
+import { getWikiInfo } from "../wikis.ts";
 
 /**
  * @description Check if a user script should be loaded based on the wiki and wildcard.
@@ -45,14 +45,14 @@ function printWarning(
     );
 }
 
-function executeScript(script: ScriptHandlerOrLocation) {
+async function executeScript(script: ScriptHandlerOrLocation) {
     if (typeof script === "string") {
         importScript(script);
     } else if (typeof script === "function") {
-        script();
+        await script();
     } else {
         // Assuming script is UserScriptSourceInformation
-        const base_url = getWikiInfoSync(script.sourcewiki)?.url;
+        const base_url = (await getWikiInfo(script.sourcewiki))?.url;
         if (!base_url) {
             warn(`No base URL found for ${script.sourcewiki}.`);
             return;
@@ -71,20 +71,23 @@ function executeScript(script: ScriptHandlerOrLocation) {
 /**
  * @description Load an external user script.
  * @public
- * @param wiki {string} - The wiki where the script should be loaded.
- * @param record {UserScriptRecord} - The user script record containing the script to load.
- * @returns {void}
+ * @param {string} wiki - The wiki where the script should be loaded.
+ * @param {string} name - The name of the script.
+ * @param {UserScriptRecord} record - The user script record containing the script to load.
+ * @param {boolean} [internal=false] - Whether the script is internal or external.
+ * @returns {Promise<boolean>} - A promise that resolves to true if the script was loaded successfully, false otherwise.
  */
 export function loadExternalUserScript(
     wiki: string,
     name: string,
     record: UserScriptRecord,
     internal: boolean = false,
-): void {
+): Promise<boolean> {
     if (!shouldLoad(record.filter)) {
         printWarning(name, wiki, internal);
-        return;
+        return Promise.resolve(false);
     }
     printInfo(name, wiki, internal);
     executeScript(record.script);
+    return Promise.resolve(true);
 }

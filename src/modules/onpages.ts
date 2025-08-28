@@ -1,13 +1,5 @@
 import { NAMESPACE } from "../constants.ts";
-import { ApiQueryPagePropsParams } from "../types.ts";
-import { isTalkNamespace, toContentNamespace } from "../utils.ts";
-
-const BASE_PAGE_PROPS_API_PARAMS: ApiQueryPagePropsParams = {
-    "action": "query",
-    "format": "json",
-    "prop": "pageprops",
-    "formatversion": "2",
-};
+import { getPageProps, isTalkNamespace, toContentNamespace } from "../utils.ts";
 
 async function isTalkPage(
     title: string,
@@ -16,28 +8,18 @@ async function isTalkPage(
     if (!isTalkNamespace(ns)) {
         return false;
     }
-    const p = structuredClone(BASE_PAGE_PROPS_API_PARAMS);
-    p.titles = `${mw.config.get("wgFormattedNamespaces")[ns]}:${title}`;
-    p.ppprop = "nonewsectionlink";
-    const api = new mw.Api();
-    const response = await api.get(p);
+    const props = await getPageProps(`${mw.config.get("wgFormattedNamespaces")[ns]}:${title}`);
     // __NONEWSECTIONLINK__ is set for talk pages that are not discussions
     // and thus should not have an "Add topic" button.
-    return !(response.query?.pages[0].pageprops?.nonewsectionlink === "");
+    return !(props?.nonewsectionlink === "");
 }
 
 async function isNonTalkPageIsDiscussion(
     title: string,
     ns: number,
 ): Promise<boolean> {
-    const p = structuredClone(BASE_PAGE_PROPS_API_PARAMS);
-    p.titles = `${
-        mw.config.get("wgFormattedNamespaces")[toContentNamespace(ns)]
-    }:${title}`;
-    p.ppprop = "newsectionlink";
-    const api = new mw.Api();
-    const response = await api.get(p);
-    return response.query?.pages[0].pageprops?.newsectionlink === "";
+    const props = await getPageProps(`${mw.config.get("wgFormattedNamespaces")[toContentNamespace(ns)]}:${title}`);
+    return props?.newsectionlink === "";
 }
 
 async function shouldHideEditButton(): Promise<string | null> {
@@ -51,11 +33,9 @@ async function shouldHideEditButton(): Promise<string | null> {
     return null;
 }
 
-export function onPages(): void {
-    const selectorPromise = shouldHideEditButton();
-    selectorPromise.then((selector) => {
-        if (selector) {
-            $(selector).hide();
-        }
-    });
+export async function onPages(): Promise<void> {
+    const selector = await shouldHideEditButton();
+    if (selector) {
+        $(selector).hide();
+    }
 }

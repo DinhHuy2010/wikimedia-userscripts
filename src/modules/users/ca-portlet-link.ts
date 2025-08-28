@@ -2,7 +2,7 @@ import { toContentNamespace, warn } from "../../utils.ts";
 import { extractGlobalUserInfo } from "./utils.ts";
 import { ApiQueryParams } from "../../types.ts";
 import { DATABASE_NAME, NAMESPACE } from "../../constants.ts";
-import { getWikiInfoSync } from "../../wikis.ts";
+import { getWikiInfo, getWikiInfoSync } from "../../wikis.ts";
 
 function addCentralAuthLink(username: string): void {
     const caLink = `https://meta.wikimedia.org/wiki/${
@@ -19,13 +19,15 @@ function addCentralAuthLink(username: string): void {
     );
 }
 
-function addUserPageLink(link: {
+async function addUserPageLink(link: {
     type: "local" | "global";
     url: string;
     home?: string;
-}): void {
+}): Promise<void> {
     const label = link.type === "local"
-        ? `User page at ${getWikiInfoSync(link.home || "metawiki")?.label || "????"}`
+        ? `User page at ${
+            (await getWikiInfo(link.home || "metawiki"))?.label || "????"
+        }`
         : "Global user page at Meta-Wiki";
     const tooltip = link.type === "local"
         ? `View this user page at this user's home wiki`
@@ -111,23 +113,15 @@ async function getUserPageLinks(home: string, username: string): Promise<
     }
 }
 
-export function addCaPortlet() {
-    function main() {
-        const username = mw.config.get("wgTitle").split("/")[0];
-        const exists_promise = extractGlobalUserInfo(username);
-        exists_promise.then((_: { home: string; name: string } | null) => {
-            if (_ !== null) {
-                addCentralAuthLink(username);
-                getUserPageLinks(_.home, _.name).then(
-                    (links) => {
-                        links.forEach(addUserPageLink);
-                    },
-                );
-            }
-        });
-    }
+export async function addCaPortlet(): Promise<void> {
     if (toContentNamespace(NAMESPACE) !== 2) {
         return;
     }
-    main();
+    const username = mw.config.get("wgTitle").split("/")[0];
+    const userinfo = await extractGlobalUserInfo(username);
+    if (userinfo !== null) {
+        addCentralAuthLink(username);
+        const links = await getUserPageLinks(userinfo.home, userinfo.name);
+        links.forEach(addUserPageLink);
+    }
 }

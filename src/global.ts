@@ -7,6 +7,8 @@
 
 /* Any JavaScript added to this page will be loaded on all wikis where you have an account (see [https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:GlobalCssJs documentation]). */
 
+// deno-lint-ignore-file no-inner-declarations
+
 import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
 import { loadExternalUserScript } from "./modules/userscript-loader.ts";
@@ -17,18 +19,22 @@ import { log } from "./utils.ts";
      * @description Initialize all external and internal user scripts.
      * @private
      */
-    // deno-lint-ignore no-inner-declarations
-    function init(): void {
-        Object.entries(dhoptions.scripts)
-            .forEach(([name, record]) => {
-                loadExternalUserScript(DATABASE_NAME, name, record, true);
-            });
+    async function init(): Promise<void> {
+        await Promise.all(
+            Object.entries(dhoptions.scripts).map(([name, record]) => {
+                if (record.type === "external") {
+                    return loadExternalUserScript(DATABASE_NAME, name, record, false);
+                } else {
+                    return loadExternalUserScript(DATABASE_NAME, name, record, true);
+                }
+            })
+        );
     }
     mw.loader.using([
         "mediawiki.util",
         "mediawiki.api",
         "mediawiki.Title",
-        "mediawiki.storage"
+        "mediawiki.storage",
     ], init);
     log("Userscripts loaded successfully.");
 }

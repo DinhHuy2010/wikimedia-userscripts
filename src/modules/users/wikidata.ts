@@ -86,15 +86,14 @@ async function addLinks(qid: string): Promise<void> {
     });
 }
 
-export function initWikidata(): void {
+export async function initWikidata(): Promise<void> {
     if (toContentNamespace(NAMESPACE) !== 2) {
         return; // Not a user page
     }
     initPortlet();
     const username = mw.config.get("wgTitle").split("/")[0];
-    getWikidataItem(username).then((qid) => {
-        if (qid) {
-            addLinks(qid);
-        }
-    });
+    const qid = await getWikidataItem(username);
+    if (qid) {
+        addLinks(qid);
+    }
 }
