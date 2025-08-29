@@ -2,7 +2,7 @@ import { toContentNamespace, warn } from "../../utils.ts";
 import { extractGlobalUserInfo } from "./utils.ts";
 import { ApiQueryParams } from "../../types.ts";
 import { DATABASE_NAME, NAMESPACE } from "../../constants.ts";
-import { getWikiInfo, getWikiInfoSync } from "../../wikis.ts";
+import { getWikiInfo } from "../../wikis/index.ts";
 
 function addCentralAuthLink(username: string): void {
     const caLink = `https://meta.wikimedia.org/wiki/${
@@ -56,7 +56,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
         "formatversion": "2",
         "titles": "User:" + username,
     };
-    const base_url = getWikiInfoSync(home)?.url;
+    const base_url = (await getWikiInfo(home))?.url;
     async function doesNotHaveLocalPage(url: string): Promise<boolean> {
         const f = new mw.ForeignApi(`${url}w/api.php`);
         const out = await f.get(p);

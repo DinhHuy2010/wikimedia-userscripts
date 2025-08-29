@@ -1,7 +1,7 @@
 import { NAMESPACE } from "../../constants.ts";
 import { toContentNamespace } from "../../utils.ts";
 import { fetchWDQS } from "../../wikidata/sparql.ts";
-import { getWikiInfoSync } from "../../wikis.ts";
+import { getWikiInfo } from "../../wikis/index.ts";
 
 const PORTLET_ID = "p-dhuserinotherprojects";
 
@@ -67,10 +67,11 @@ async function addLinks(qid: string): Promise<void> {
         "Link to user's linked Wikidata item",
         "g",
     );
-    Object.values(sitelinks).forEach((link) => {
+    Object.values(sitelinks).forEach(async (link) => {
         const site = link.site;
         const title = link.title;
-        const rurl = getWikiInfoSync(site)?.url;
+        const wi = await getWikiInfo(site);
+        const rurl = wi?.url;
         if (!rurl) {
             return; // No URL found for this site
         }
@@ -79,9 +80,9 @@ async function addLinks(qid: string): Promise<void> {
         mw.util.addPortletLink(
             PORTLET_ID,
             url.toString(),
-            getWikiInfoSync(site)?.label || site,
+            wi?.label || site,
             `${PORTLET_ID}-wd-${site}`,
-            `Link to user's page on ${getWikiInfoSync(site)?.label}`,
+            `Link to user's page on ${wi?.label || site}`,
         );
     });
 }

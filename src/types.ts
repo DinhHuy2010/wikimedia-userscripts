@@ -5,16 +5,16 @@ import type {
     CentralAuthApiQueryGlobalUserInfoParams,
 } from "types-mediawiki/api_params";
 import { FilterType } from "./filters/index.ts";
-import { WikiInfo } from "./wikis/types.ts";
-
-export type WikiDBWildCardType = string | string[] | RegExp;
 type UserScriptSourceInformation = {
     sourcewiki: string;
     title: string;
     ctype?: "text/javascript" | "text/css";
-}
+};
 
-export type ScriptHandlerOrLocation = string | (() => void | Promise<void>) | UserScriptSourceInformation;
+export type ScriptHandlerOrLocation =
+    | string
+    | (() => void | Promise<void>)
+    | UserScriptSourceInformation;
 
 // {<string>: {script: <string> | <function>, wiki: <wiki>}}
 // If string, use importScript(<string>);

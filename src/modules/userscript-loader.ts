@@ -4,7 +4,7 @@ import type {
     UserScriptRecord,
 } from "../types.ts";
 import { log, warn } from "../utils.ts";
-import { getWikiInfo } from "../wikis.ts";
+import { getWikiInfo } from "../wikis/index.ts";
 
 /**
  * @description Check if a user script should be loaded based on the wiki and wildcard.
