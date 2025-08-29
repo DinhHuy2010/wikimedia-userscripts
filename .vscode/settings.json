@@ -1,0 +1,17 @@
+{
+    "deno.enable": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "denoland.vscode-deno",
+    },
+    "[json]": {
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "insert",
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "git.postCommitCommand": "sync",
+    "licenser.author": "DinhHuy2010",
+    "licenser.license": "Custom",
+    "licenser.customHeader": "From DinhHuy2010/wikimedia-userscripts\nSPDX-License-Identifier: CC-BY-4.0 OR MIT\nSee CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details"
+}
