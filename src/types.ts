@@ -5,6 +5,7 @@ import type {
     CentralAuthApiQueryGlobalUserInfoParams,
 } from "types-mediawiki/api_params";
 import { FilterType } from "./filters/index.ts";
+import { WikiInfo } from "./wikis/types.ts";
 
 export type WikiDBWildCardType = string | string[] | RegExp;
 type UserScriptSourceInformation = {
@@ -41,26 +42,6 @@ export interface Configuration {
      */
     logging: boolean;
 }
-
-export interface WikiInfo {
-    /**
-     * @description Name of this wiki instance
-     * @type {string}
-     */
-    label: string;
-    /**
-     * @description base site URL
-     * @type {string}
-     */
-    url: string;
-    /**
-     * @description The group this wiki belongs to, e.g., "wiki"
-     * @type {string}
-     */
-    group: string;
-}
-
-export type Wikis = Record<string, WikiInfo>;
 
 export type {
     ApiParseParams,
