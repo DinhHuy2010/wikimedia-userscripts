@@ -4,5 +4,8 @@
     "mw-dhscript-wikis-nostorage-warning": "Warning: Storage is disabled, wikis metadata will not be cached.",
     "mw-dhscript-wikidata-spraql-httperror": "Failed to fetch data from Wikidata Query Service, HTTP error: $1 $2",
     "mw-dhscript-disambiguation-tab": "Disambiguation page",
-    "mw-dhscript-setting-disambiguation-page": "Setting disambiguation label for the current tab..."
+    "mw-dhscript-setting-disambiguation-page": "Setting disambiguation label for the current tab...",
+    "mw-dhscript-discussion-tab": "Discussion",
+    "mw-dhscript-discussion-setting-tab": "Changing 'Talk' to 'Discussion'...",
+    "mw-dhscript-discussion-set-tab-unsupported-skin": "Unsupported skin for changing 'Talk' to 'Discussion': $1"
 }
