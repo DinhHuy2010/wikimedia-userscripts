@@ -12,7 +12,7 @@ function getCacheIfPossible(): Wikis | null {
         return JSON.parse(cached) as Wikis;
     }
     if (cached === false) {
-        warn("Storage is disabled!");
+        warn(mw.msg("mw-dhscript-wikis-nostorage-warning"));
     }
     return null;
 }

@@ -1,4 +1,5 @@
 {
     "mw-dhscript-i18n-messages-loaded": "Messages have been loaded",
-    "mw-dhscript-global-initialized": "Userscript loaded successfully."
+    "mw-dhscript-global-initialized": "Userscript loaded successfully.",
+    "mw-dhscript-wikis-nostorage-warning": "Warning: Storage is disabled, wikis metadata will not be cached."
 }
