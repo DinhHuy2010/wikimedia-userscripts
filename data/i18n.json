@@ -7,5 +7,8 @@
     "mw-dhscript-setting-disambiguation-page": "Setting disambiguation label for the current tab...",
     "mw-dhscript-discussion-tab": "Discussion",
     "mw-dhscript-discussion-setting-tab": "Changing 'Talk' to 'Discussion'...",
-    "mw-dhscript-discussion-set-tab-unsupported-skin": "Unsupported skin for changing 'Talk' to 'Discussion': $1"
+    "mw-dhscript-discussion-set-tab-unsupported-skin": "Unsupported skin for changing 'Talk' to 'Discussion': $1",
+    "mw-dhscript-enwiki-specific-viewcommons": "View on Wikimedia Commons",
+    "mw-dhscript-enwiki-specific-fileexporter": "Transfer to Wikimedia Commons",
+    "mw-dhscript-enwiki-specific-loading": "Loading English Wikipedia specific userscripts..."
 }
