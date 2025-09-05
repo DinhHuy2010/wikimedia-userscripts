@@ -64,7 +64,7 @@ async function getBuildTargets(): Promise<BuildTarget[]> {
     });
 }
 
-async function main(): Promise<void> {
+export async function main(): Promise<void> {
     if (!WIKIMEDIA_USERNAME || !WIKIMEDIA_PASSWORD) {
         console.error(
             "WIKIMEDIA_USERNAME and WIKIMEDIA_PASSWORD must be set in the environment.",

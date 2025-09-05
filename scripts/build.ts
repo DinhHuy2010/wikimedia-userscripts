@@ -8,8 +8,8 @@ async function loadConfig() {
 }
 const conf = await loadConfig();
 
-function getCodenames(): string[] {
-    return parseArgs(Deno.args)._.map(String);
+function getCodenames(args: string[]): string[] {
+    return parseArgs(args)._.map(String);
 }
 
 function getFileTargets(codenames: string[]): Record<string, BuildTarget> {
@@ -62,12 +62,12 @@ function buildBuildPromises(
     return promises;
 }
 
-async function main(knownCodenames: string[] | null = null): Promise<void> {
+export async function main(knownCodenames: string[] | null = null): Promise<void> {
     let codenames: string[];
     if (knownCodenames) {
         codenames = knownCodenames;
     } else {
-        codenames = getCodenames();
+        codenames = getCodenames(Deno.args);
         if (codenames.length === 0) {
             codenames = Object.keys(conf.buildTargets);
         }
@@ -80,7 +80,6 @@ async function main(knownCodenames: string[] | null = null): Promise<void> {
         JSON.stringify(results.map(([c, _]) => c)),
     );
     console.log(`Built ${results.length} targets successfully.`);
-    Deno.exit(0);
 }
 
 if (import.meta.main) {
