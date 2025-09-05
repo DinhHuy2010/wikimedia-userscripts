@@ -1,6 +1,7 @@
 import { Mwn } from "mwn";
 import { Wikis } from "../src/wikis/types.ts";
 import _wikis from "../data/wikis.json" with { type: "json" };
+import { BuildTarget } from "./types.ts";
 
 const WIKIS = _wikis as Wikis;
 
@@ -14,7 +15,6 @@ async function loadConfig() {
     return module.config;
 }
 const conf = await loadConfig();
-type BuildTarget = typeof conf.buildTargets[0];
 
 function createEditSummary(page: string): string {
     return `Update ${page} from wikimedia-userscripts repository`;
@@ -47,6 +47,23 @@ async function publishFromBuildTarget(target: BuildTarget) {
     );
 }
 
+async function getBuildTargets(): Promise<BuildTarget[]> {
+    let o: string[];
+    try {
+        o = JSON.parse(await Deno.readTextFile("./scripts/built-files.json"));
+    } catch (error) {
+        console.error("Error reading built files:", error);
+        Deno.exit(1);
+    }
+    return o.map((codename) => {
+        const target = conf.buildTargets[codename];
+        if (!target) {
+            throw new Error(`Unknown build target codename: ${codename}`);
+        }
+        return target;
+    });
+}
+
 async function main(): Promise<void> {
     if (!WIKIMEDIA_USERNAME || !WIKIMEDIA_PASSWORD) {
         console.error(
@@ -54,7 +71,7 @@ async function main(): Promise<void> {
         );
         Deno.exit(1);
     }
-    const promises = conf.buildTargets.map((target) =>
+    const promises = (await getBuildTargets()).map((target) =>
         publishFromBuildTarget(target).then(
             (response) => {
                 if (response?.nochange) {
