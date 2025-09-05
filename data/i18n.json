@@ -10,5 +10,6 @@
     "mw-dhscript-discussion-set-tab-unsupported-skin": "Unsupported skin for changing 'Talk' to 'Discussion': $1",
     "mw-dhscript-enwiki-specific-viewcommons": "View on Wikimedia Commons",
     "mw-dhscript-enwiki-specific-fileexporter": "Transfer to Wikimedia Commons",
-    "mw-dhscript-enwiki-specific-loading": "Loading English Wikipedia specific userscripts..."
+    "mw-dhscript-enwiki-specific-loading": "Loading English Wikipedia specific userscripts...",
+    "mw-dhscript-font-loader-loading": "Loading Cascadia Mono font..."
 }
