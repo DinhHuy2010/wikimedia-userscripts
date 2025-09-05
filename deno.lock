@@ -2,6 +2,7 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/assert@1": "1.0.13",
+    "jsr:@std/cli@^1.0.22": "1.0.22",
     "jsr:@std/internal@^1.0.6": "1.0.9",
     "npm:browserslist-config-wikimedia@0.7": "0.7.0",
     "npm:browserslist@*": "4.25.1",
@@ -16,6 +17,9 @@
       "dependencies": [
         "jsr:@std/internal"
       ]
+    },
+    "@std/cli@1.0.22": {
+      "integrity": "50d1e4f87887cb8a8afa29b88505ab5081188f5cad3985460c3b471fa49ff21a"
     },
     "@std/internal@1.0.9": {
       "integrity": "bdfb97f83e4db7a13e8faab26fb1958d1b80cc64366501af78a0aee151696eb8"
@@ -469,6 +473,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "jsr:@std/cli@^1.0.22",
       "npm:browserslist-config-wikimedia@0.7",
       "npm:esbuild@0.25.6",
       "npm:mwn@^3.0.1",
