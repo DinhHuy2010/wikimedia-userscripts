@@ -49,5 +49,5 @@ import { initMessages } from "./i18n.ts";
         "mediawiki.Title",
         "mediawiki.storage",
     ], init);
-    log("Userscripts loaded successfully.");
+    log(mw.msg("mw-dhscript-global-initialized"));
 }

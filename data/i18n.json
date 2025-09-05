@@ -1,3 +1,4 @@
 {
-    "mw-dhscript-i18n-messages-loaded": "Messages have been loaded"
+    "mw-dhscript-i18n-messages-loaded": "Messages have been loaded",
+    "mw-dhscript-global-initialized": "Userscript loaded successfully."
 }
