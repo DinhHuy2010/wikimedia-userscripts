@@ -3,7 +3,6 @@
  * @description Constants used in the global script
  */
 
-
 const params = new URLSearchParams({
     family: "Cascadia Mono:ital@0;1",
     display: "swap",
