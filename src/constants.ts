@@ -3,7 +3,6 @@
  * @description Constants used in the global script
  */
 
-import { ApiQueryPagePropsParams } from "./types.ts";
 
 const params = new URLSearchParams({
     family: "Cascadia Mono:ital@0;1",
