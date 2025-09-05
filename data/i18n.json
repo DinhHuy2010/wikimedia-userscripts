@@ -23,5 +23,10 @@
     "mw-dhscript-tagline-set-sitesub-by-status-hidden": "siteSub hidden.",
     "mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext": "Using custom siteSub wikitext...",
     "mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext-empty": "No wikitext provided for custom siteSub, doing nothing...",
-    "mw-dhscript-tagline-set-sitesub-by-status-unknown-status": "Unknown siteSub status: $1, doing nothing..."
+    "mw-dhscript-tagline-set-sitesub-by-status-unknown-status": "Unknown siteSub status: $1, doing nothing...",
+    "mw-dhscript-userscript-loader-internal-type": "internal",
+    "mw-dhscript-userscript-loader-external-type": "external",
+    "mw-dhscript-userscript-loader-info": "Loading $1 script $2 on $3.",
+    "mw-dhscript-userscript-loader-warning": "Skipping $1 script $2 as it is not applicable to $3.",
+    "mw-dhscript-userscript-loader-execute-nobaseurl-warning": "No base URL found for $1"
 }
