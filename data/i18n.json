@@ -1,5 +1,8 @@
 {
     "mw-dhscript-i18n-messages-loaded": "Messages have been loaded",
     "mw-dhscript-global-initialized": "Userscript loaded successfully.",
-    "mw-dhscript-wikis-nostorage-warning": "Warning: Storage is disabled, wikis metadata will not be cached."
+    "mw-dhscript-wikis-nostorage-warning": "Warning: Storage is disabled, wikis metadata will not be cached.",
+    "mw-dhscript-wikidata-spraql-httperror": "Failed to fetch data from Wikidata Query Service, HTTP error: $1 $2",
+    "mw-dhscript-disambiguation-tab": "Disambiguation page",
+    "mw-dhscript-setting-disambiguation-page": "Setting disambiguation label for the current tab..."
 }

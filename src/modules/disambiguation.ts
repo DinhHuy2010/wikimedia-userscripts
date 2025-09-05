@@ -20,7 +20,7 @@ export async function setDisambiguationLabel(): Promise<void> {
         NAMESPACE,
     );
     if (isDisambig) {
-        log("Setting disambiguation label for the current tab...");
-        setTabLabel("Disambiguation page");
+        log(mw.msg("mw-dhscript-setting-disambiguation-page"));
+        setTabLabel(mw.msg("mw-dhscript-disambiguation-tab"));
     }
 }
