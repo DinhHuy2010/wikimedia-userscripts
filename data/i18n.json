@@ -12,5 +12,16 @@
     "mw-dhscript-enwiki-specific-fileexporter": "Transfer to Wikimedia Commons",
     "mw-dhscript-enwiki-specific-loading": "Loading English Wikipedia specific userscripts...",
     "mw-dhscript-font-loader-loading": "Loading Cascadia Mono font...",
-    "mw-dhscript-tablabel-skin-unsupported": "Unsupported skin for setting tab label: $1"
+    "mw-dhscript-tablabel-skin-unsupported": "Unsupported skin for setting tab label: $1",
+    "mw-dhscript-tagline-hide-sitesub": "Hiding siteSub...",
+    "mw-dhscript-tagline-show-sitesub": "Showing siteSub...",
+    "mw-dhscript-tagline-set-sitesub": "Setting siteSub...",
+    "mw-dhscript-tagline-wikitext-render-error": "Error rendering wikitext: $1",
+    "mw-dhscript-tagline-wikitext-rendered": "siteSub set by wikitext.",
+    "mw-dhscript-tagline-set-sitesub-by-status": "Setting siteSub by status...",
+    "mw-dhscript-tagline-set-sitesub-by-status-doing-nothing": "Using default siteSub options, doing nothing...",
+    "mw-dhscript-tagline-set-sitesub-by-status-hidden": "siteSub hidden.",
+    "mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext": "Using custom siteSub wikitext...",
+    "mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext-empty": "No wikitext provided for custom siteSub, doing nothing...",
+    "mw-dhscript-tagline-set-sitesub-by-status-unknown-status": "Unknown siteSub status: $1, doing nothing..."
 }

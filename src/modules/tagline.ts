@@ -22,17 +22,17 @@ export enum SiteSubEnum {
 }
 
 function hidesiteSub(): void {
-    log("Hiding siteSub...");
+    log(mw.msg("mw-dhscript-tagline-hide-sitesub"));
     $(SITESUB_SELECTOR).hide();
 }
 
 function showsiteSub(): void {
-    log("Showing siteSub...");
+    log(mw.msg("mw-dhscript-tagline-show-sitesub"));
     $(SITESUB_SELECTOR).show();
 }
 
 function setsiteSub(html: string): void {
-    log("Setting siteSub...");
+    log(mw.msg("mw-dhscript-tagline-set-sitesub"));
     $(SITESUB_SELECTOR).html(html);
 }
 
@@ -41,9 +41,9 @@ async function setsiteSubbyWikitext(wikitext: string): Promise<void> {
         const html = await renderWikitext(wikitext);
         setsiteSub(html);
     } catch (err) {
-        error(`Error rendering wikitext: ${err}`);
+        error(mw.msg("mw-dhscript-tagline-wikitext-render-error", err));
     } finally {
-        log("siteSub set by wikitext.");
+        log(mw.msg("mw-dhscript-tagline-wikitext-rendered"));
     }
 }
 
@@ -53,12 +53,12 @@ export async function setsiteSubByStatus(
         wikitext?: string;
     },
 ): Promise<SiteSubEnum> {
-    log("Setting siteSub by status...");
+    log(mw.msg("mw-dhscript-tagline-set-sitesub-by-status"));
     const { status, wikitext } = siteSub;
     switch (status) {
         case SiteSubEnum.USE_DEFAULT:
             // Do nothing, use the default siteSub options
-            log("Using default siteSub options, doing nothing...");
+            log(mw.msg("mw-dhscript-tagline-set-sitesub-by-status-doing-nothing"));
             return Promise.resolve(SiteSubEnum.USE_DEFAULT);
         case SiteSubEnum.HIDE:
             hidesiteSub();
@@ -68,15 +68,15 @@ export async function setsiteSubByStatus(
             return Promise.resolve(SiteSubEnum.SHOW);
         case SiteSubEnum.USE_CUSTOM:
             if (wikitext) {
-                log("Using custom siteSub wikitext...");
+                log(mw.msg("mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext"));
                 await setsiteSubbyWikitext(wikitext);
                 return Promise.resolve(SiteSubEnum.USE_CUSTOM);
             } else {
-                log("No wikitext provided for custom siteSub, doing nothing...");
+                log(mw.msg("mw-dhscript-tagline-set-sitesub-by-status-custom-wikitext-empty"));
                 return Promise.resolve(SiteSubEnum.USE_DEFAULT);
             }
         default:
-            log(`Unknown siteSub status: ${status}, doing nothing...`);
+            log(mw.msg("mw-dhscript-tagline-set-sitesub-by-status-unknown-status", status));
             return Promise.resolve(SiteSubEnum.USE_DEFAULT);
     }
 }
