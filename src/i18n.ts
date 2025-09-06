@@ -5,7 +5,7 @@
 import { log } from "./utils.ts";
 
 const SOURCE =
-    "https://raw.githubusercontent.com/DinhHuy2010/wikimedia-userscripts/i18n/data/i18n.json";
+    "https://raw.githubusercontent.com/DinhHuy2010/wikimedia-userscripts/main/data/i18n.json";
 
 async function getMessages(): Promise<Record<string, string>> {
     const response = await fetch(SOURCE);
