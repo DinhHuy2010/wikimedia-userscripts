@@ -30,6 +30,7 @@
     "mw-dhscript-userscript-loader-warning": "Skipping $1 script $2 as it is not applicable to $3.",
     "mw-dhscript-userscript-loader-execute-nobaseurl-warning": "No base URL found for $1",
     "mw-dhscript-users-ca-portlet-link-url": "https://meta.wikimedia.org/wiki/Special:CentralAuth/$1",
+    "mw-dhscript-users-ca-portlet-link-meta-userpage-url": "https://meta.wikimedia.org/wiki/User:$1",
     "mw-dhscript-users-ca-portlet-link-ca-label": "Global account information",
     "mw-dhscript-users-ca-portlet-link-ca-description": "View global account information of this user",
     "mw-dhscript-users-ca-portlet-link-global-label": "Global user page at Meta-Wiki",

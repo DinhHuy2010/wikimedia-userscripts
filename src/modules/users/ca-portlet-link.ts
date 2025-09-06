@@ -52,11 +52,12 @@ async function getUserPageLinks(home: string, username: string): Promise<
         home?: string;
     }[]
 > {
+    const encodedUsername = mw.util.wikiUrlencode(username);
     const p: ApiQueryParams = {
         "action": "query",
         "format": "json",
         "formatversion": "2",
-        "titles": "User:" + username,
+        "titles": `User:${encodedUsername}`,
     };
     const base_url = (await getWikiInfo(home))?.url;
     async function doesNotHaveLocalPage(url: string): Promise<boolean> {
@@ -72,7 +73,12 @@ async function getUserPageLinks(home: string, username: string): Promise<
             return [];
         }
         if (!base_url) {
-            warn(mw.msg("mw-dhscript-users-ca-portlet-link-nobaseurl-warning", home));
+            warn(
+                mw.msg(
+                    "mw-dhscript-users-ca-portlet-link-nobaseurl-warning",
+                    home,
+                ),
+            );
             return [];
         }
         if (await doesNotHaveLocalPage(base_url)) {
@@ -81,7 +87,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
         }
         return [{
             type: "local",
-            url: `${base_url}wiki/User:${username}`,
+            url: `${base_url}wiki/User:${encodedUsername}`,
             home: home,
         }];
     } else {
@@ -98,7 +104,10 @@ async function getUserPageLinks(home: string, username: string): Promise<
         if (doesMetaPageExist) {
             links.push({
                 type: "global",
-                url: `https://meta.wikimedia.org/wiki/User:${username}`,
+                url: mw.msg(
+                    "mw-dhscript-users-ca-portlet-link-meta-userpage-url",
+                    encodedUsername,
+                ),
             });
         }
         if (DATABASE_NAME !== home && home !== "metawiki") {
@@ -106,7 +115,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
             if (doesLocalPageExist) {
                 links.push({
                     type: "local",
-                    url: `${base_url}wiki/User:${username}`,
+                    url: `${base_url}wiki/User:${encodedUsername}`,
                     home: home,
                 });
             }
