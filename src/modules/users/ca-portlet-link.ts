@@ -5,15 +5,16 @@ import { DATABASE_NAME, NAMESPACE } from "../../constants.ts";
 import { getWikiInfo } from "../../wikis/index.ts";
 
 function addCentralAuthLink(username: string): void {
-    const caLink = `https://meta.wikimedia.org/wiki/${
-        mw.util.wikiUrlencode(`Special:CentralAuth/${username}`)
-    }`;
+    const caLink = mw.msg(
+        "mw-dhscript-users-ca-portlet-link-url",
+        mw.util.wikiUrlencode(username),
+    );
     mw.util.addPortletLink(
         "p-tb",
         caLink,
-        "Global account information",
+        mw.msg("mw-dhscript-users-ca-portlet-link-ca-label"),
         "t-ca",
-        "View global account information of this user",
+        mw.msg("mw-dhscript-users-ca-portlet-link-ca-description"),
         undefined,
         "#t-log",
     );
@@ -25,13 +26,14 @@ async function addUserPageLink(link: {
     home?: string;
 }): Promise<void> {
     const label = link.type === "local"
-        ? `User page at ${
-            (await getWikiInfo(link.home || "metawiki"))?.label || "????"
-        }`
-        : "Global user page at Meta-Wiki";
+        ? mw.msg(
+            "mw-dhscript-users-ca-portlet-link-local-label",
+            (await getWikiInfo(link.home || "metawiki"))?.label || "????",
+        )
+        : mw.msg("mw-dhscript-users-ca-portlet-link-global-label");
     const tooltip = link.type === "local"
-        ? `View this user page at this user's home wiki`
-        : "View this global user page at Meta-Wiki";
+        ? mw.msg("mw-dhscript-users-ca-portlet-link-local-description")
+        : mw.msg("mw-dhscript-users-ca-portlet-link-global-description");
     mw.util.addPortletLink(
         "p-tb",
         link.url,
@@ -70,7 +72,7 @@ async function getUserPageLinks(home: string, username: string): Promise<
             return [];
         }
         if (!base_url) {
-            warn(`No URL found for home wiki: ${home}`);
+            warn(mw.msg("mw-dhscript-users-ca-portlet-link-nobaseurl-warning", home));
             return [];
         }
         if (await doesNotHaveLocalPage(base_url)) {
