@@ -1,8 +1,5 @@
 import { FilterType } from "../filters/index.ts";
-import type {
-    ScriptHandlerOrLocation,
-    UserScriptRecord,
-} from "../types.ts";
+import type { ScriptHandlerOrLocation, UserScriptRecord } from "../types.ts";
 import { log, warn } from "../utils.ts";
 import { getWikiInfo } from "../wikis/index.ts";
 
@@ -26,8 +23,12 @@ function printInfo(
     wiki: string,
     internal: boolean,
 ): void {
-    const stype = internal ? "internal" : "external";
-    log(`Loading ${stype} script ${name} on ${wiki}.`);
+    const stype = mw.msg(
+        internal
+            ? "mw-dhscript-userscript-loader-internal-type"
+            : "mw-dhscript-userscript-loader-external-type",
+    );
+    log(mw.msg("mw-dhscript-userscript-loader-info", stype, name, wiki));
 }
 
 /**
@@ -39,10 +40,12 @@ function printWarning(
     wiki: string,
     internal: boolean,
 ): void {
-    const stype = internal ? "internal" : "external";
-    warn(
-        `Skipping ${stype} script ${name} as it is not applicable to ${wiki}.`,
+    const stype = mw.msg(
+        internal
+            ? "mw-dhscript-userscript-loader-internal-type"
+            : "mw-dhscript-userscript-loader-external-type",
     );
+    warn(mw.msg("mw-dhscript-userscript-loader-warning", stype, name, wiki));
 }
 
 async function executeScript(script: ScriptHandlerOrLocation) {
@@ -81,8 +84,8 @@ export function loadExternalUserScript(
     wiki: string,
     name: string,
     record: UserScriptRecord,
-    internal: boolean = false,
 ): Promise<boolean> {
+    const internal = record.type === "internal";
     if (!shouldLoad(record.filter)) {
         printWarning(name, wiki, internal);
         return Promise.resolve(false);

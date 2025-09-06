@@ -6,7 +6,7 @@ export async function fetchWDQS(sparqlQuery: string): Promise<any> {
     const headers = { "Accept": "application/sparql-results+json" };
     const response = await fetch(fullUrl, { headers });
     if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+        throw new Error(mw.msg("mw-dhscript-wikidata-spraql-httperror", response.status, response.statusText));
     }
     return response.json();
 }

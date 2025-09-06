@@ -12,7 +12,7 @@ export function setTabLabel(label: string): void {
     } else if (SKINS_FOR_VECTOR_SELECTOR.includes(SKIN)) {
         selector = CSS_SELECTOR_FOR_VECTOR;
     } else {
-        warn(`Unsupported skin for setting tab label: ${SKIN}`);
+        warn(mw.msg("mw-dhscript-tablabel-skin-unsupported"));
         return;
     }
     $(selector).text(label);

@@ -9,8 +9,12 @@ function updateViewLinksForCommons() {
         NAMESPACE === 6 &&
         SKINS_FOR_VECTOR_SELECTOR.includes(SKIN)
     ) {
-        $("#ca-view-foreign a").text("View on Wikimedia Commons");
-        $("#ca-fileExporter a").text("Transfer to Wikimedia Commons");
+        $("#ca-view-foreign a").text(
+            mw.msg("mw-dhscript-enwiki-specific-viewcommons"),
+        );
+        $("#ca-fileExporter a").text(
+            mw.msg("mw-dhscript-enwiki-specific-fileexporter"),
+        );
     }
 }
 
@@ -31,7 +35,7 @@ function getSiteSub(): {
 }
 
 export function executeOnEnWiki(): void {
-    log("Loading English Wikipedia specific userscripts...");
+    log(mw.msg("mw-dhscript-enwiki-specific-loading"));
     updateViewLinksForCommons();
     setsiteSubByPredicate(getSiteSub);
 }

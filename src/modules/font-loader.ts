@@ -4,6 +4,6 @@ import { log } from "../utils.ts";
 const FONT_CSS = `@import url('${CASCADIA_MONO_FONT_URL}');`;
 
 export function loadCascadiaMonoFont(): void {
-    log(`Loading Cascadia Mono font...`);
+    log(mw.msg("mw-dhscript-font-loader-loading"));
     mw.util.addCSS(FONT_CSS);
 }
