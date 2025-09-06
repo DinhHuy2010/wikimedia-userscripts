@@ -84,8 +84,8 @@ export function loadExternalUserScript(
     wiki: string,
     name: string,
     record: UserScriptRecord,
-    internal: boolean = false,
 ): Promise<boolean> {
+    const internal = record.type === "internal";
     if (!shouldLoad(record.filter)) {
         printWarning(name, wiki, internal);
         return Promise.resolve(false);

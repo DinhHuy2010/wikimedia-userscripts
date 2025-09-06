@@ -25,23 +25,10 @@ import { initMessages } from "./i18n.ts";
         await initMessages();
         await Promise.all(
             Object.entries(dhoptions.scripts).map(([name, record]) => {
-                if (record.type === "external") {
-                    return loadExternalUserScript(
-                        DATABASE_NAME,
-                        name,
-                        record,
-                        false,
-                    );
-                } else {
-                    return loadExternalUserScript(
-                        DATABASE_NAME,
-                        name,
-                        record,
-                        true,
-                    );
-                }
+                return loadExternalUserScript(DATABASE_NAME, name, record);
             }),
         );
+        log(mw.msg("mw-dhscript-global-initialized"));
     }
     mw.loader.using([
         "mediawiki.util",
@@ -49,5 +36,4 @@ import { initMessages } from "./i18n.ts";
         "mediawiki.Title",
         "mediawiki.storage",
     ], init);
-    log(mw.msg("mw-dhscript-global-initialized"));
 }
