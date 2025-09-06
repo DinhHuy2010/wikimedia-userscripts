@@ -28,7 +28,7 @@ function initPortlet(): void {
     }
     mw.util.addPortlet(
         PORTLET_ID,
-        "User in other projects",
+        mw.msg("mw-dhscript-users-wikidata-otherprojects-label"),
         "#p-wikibase-otherprojects",
     );
 }
@@ -62,9 +62,11 @@ async function addLinks(qid: string): Promise<void> {
     mw.util.addPortletLink(
         PORTLET_ID,
         wikidataLink,
-        "Wikidata item",
+        mw.msg("mw-dhscript-users-wikidata-otherprojects-wikidata-item-label"),
         `${PORTLET_ID}-wd-item`,
-        "Link to user's linked Wikidata item",
+        mw.msg(
+            "mw-dhscript-users-wikidata-otherprojects-wikidata-item-description",
+        ),
         "g",
     );
     Object.values(sitelinks).forEach(async (link) => {
@@ -82,7 +84,10 @@ async function addLinks(qid: string): Promise<void> {
             url.toString(),
             wi?.label || site,
             `${PORTLET_ID}-wd-${site}`,
-            `Link to user's page on ${wi?.label || site}`,
+            mw.msg(
+                "mw-dhscript-users-wikidata-otherprojects-sitelink-description",
+                wi?.label || site,
+            ),
         );
     });
 }

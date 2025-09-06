@@ -36,5 +36,9 @@
     "mw-dhscript-users-ca-portlet-link-local-label": "User page at $1",
     "mw-dhscript-users-ca-portlet-link-global-description": "View this user's global user page at Meta-Wiki",
     "mw-dhscript-users-ca-portlet-link-local-description": "View this user page at this user's home wiki",
-    "mw-dhscript-users-ca-portlet-link-nobaseurl-warning": "No URL found for home wiki: $1"
+    "mw-dhscript-users-ca-portlet-link-nobaseurl-warning": "No URL found for home wiki: $1",
+    "mw-dhscript-users-wikidata-otherprojects-label": "User in other projects",
+    "mw-dhscript-users-wikidata-otherprojects-wikidata-item-label": "Wikidata item",
+    "mw-dhscript-users-wikidata-otherprojects-wikidata-item-description": "Link to user's linked Wikidata item",
+    "mw-dhscript-users-wikidata-otherprojects-sitelink-description": "Link to user's sitelinked page on $1"
 }
