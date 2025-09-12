@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: CC-BY-4.0 OR MIT
 // See CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details
 
-import { log } from "./utils.ts";
+import { assignInternal } from "../internal.ts";
 
 const SOURCE =
     "https://raw.githubusercontent.com/DinhHuy2010/wikimedia-userscripts/main/data/i18n.json";
@@ -18,9 +18,11 @@ async function getMessages(): Promise<Record<string, string>> {
     return data;
 }
 
-export async function initMessages(): Promise<void> {
-    log("Loading messages...");
+async function initMessages(): Promise<void> {
+    console.log("Loading messages...");
     const messages = await getMessages();
     mw.messages.set(messages);
-    log(mw.msg("mw-dhscript-i18n-messages-loaded"));
+    console.log(mw.msg("mw-dhscript-i18n-messages-loaded"));
 }
+
+assignInternal({ initMessages });

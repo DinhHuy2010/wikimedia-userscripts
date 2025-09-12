@@ -13,7 +13,7 @@ import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
 import { loadExternalUserScript } from "./modules/userscript-loader.ts";
 import { log } from "./utils.ts";
-import { initMessages } from "./i18n.ts";
+import { getInternal } from "./internal.ts";
 
 {
     /**
@@ -21,8 +21,13 @@ import { initMessages } from "./i18n.ts";
      * @private
      */
     async function init(): Promise<void> {
-        // Initialize i18n messages
-        await initMessages();
+        // Initialize i18n messages first
+        await mw.loader.getScript(
+            "https://meta.wikimedia.org/w/index.php?title=User:DinhHuy2010/dhscript-global-i18n.js&action=raw&ctype=text/javascript",
+        );
+        await (getInternal("initMessages") as () =>
+            | Promise<void>
+            | undefined)?.();
         await Promise.all(
             Object.entries(dhoptions.scripts).map(([name, record]) => {
                 return loadExternalUserScript(DATABASE_NAME, name, record);

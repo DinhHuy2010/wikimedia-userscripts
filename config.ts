@@ -12,6 +12,7 @@ export const config: Configuration = {
             expectedOutputLocation: "./build/global.js",
             options: generateBuildOptions({
                 entryPoints: ["./src/global.ts"],
+                outdir: "./build",
             }),
         },
         "globalcss": {
@@ -21,6 +22,17 @@ export const config: Configuration = {
             expectedOutputLocation: "./build/global.css",
             options: generateBuildOptions({
                 entryPoints: ["./src/global.css"],
+                outdir: "./build",
+            }),
+        },
+        "i18n": {
+            targetwiki: "metawiki",
+            targetpage: "User:DinhHuy2010/dhscript-global-i18n.js",
+            name: "dhscript-global-i18n.js",
+            expectedOutputLocation: "./build/dhscript-global-i18n.js",
+            options: generateBuildOptions({
+                entryPoints: ["./src/i18n/index.ts"],
+                outfile: "./build/dhscript-global-i18n.js",
             }),
         },
     },

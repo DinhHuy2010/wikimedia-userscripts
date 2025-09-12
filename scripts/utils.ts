@@ -29,7 +29,6 @@ const HEADER_CSS = `/**
 const COMMON_BUILD_OPTIONS: Partial<BuildOptions> = {
     bundle: true,
     platform: "browser",
-    outdir: "./build",
     banner: { js: HEADER_JS, css: HEADER_CSS },
     legalComments: "none",
     target: ["es6"],
