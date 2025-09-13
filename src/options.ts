@@ -14,6 +14,7 @@ import {
     validOnMainPage,
     validOnWiki,
 } from "./filters/index.ts";
+import { itemDoc } from "./wikidata/itemdoc.ts";
 
 export const dhoptions: Configuration = {
     scripts: {
@@ -194,6 +195,11 @@ export const dhoptions: Configuration = {
             type: "internal",
             script: executeOnEnWiki,
             filter: validOnWiki("enwiki"),
+        },
+        "itemdoc": {
+            type: "internal",
+            script: itemDoc,
+            filter: validOnWiki("wikidatawiki"),
         },
     },
     logging: true,
