@@ -82,11 +82,11 @@ async function addLinks(qid: string): Promise<void> {
         mw.util.addPortletLink(
             PORTLET_ID,
             url.toString(),
-            wi?.label || site,
+            wi?.name || site,
             `${PORTLET_ID}-wd-${site}`,
             mw.msg(
                 "mw-dhscript-users-wikidata-otherprojects-sitelink-description",
-                wi?.label || site,
+                wi?.name || site,
             ),
         );
     });

@@ -67,5 +67,4 @@ export class TaskManager {
         const p = this.buildPromise();
         return await p;
     }
-
 }

@@ -28,7 +28,7 @@ async function addUserPageLink(link: {
     const label = link.type === "local"
         ? mw.msg(
             "mw-dhscript-users-ca-portlet-link-local-label",
-            (await getWikiInfo(link.home || "metawiki"))?.label || "????",
+            (await getWikiInfo(link.home || "metawiki"))?.name || "????",
         )
         : mw.msg("mw-dhscript-users-ca-portlet-link-global-label");
     const tooltip = link.type === "local"
