@@ -9,8 +9,8 @@ import { FilterType } from "./types.ts";
  * @public
  * @returns {boolean} True if the environment is suitable, false otherwise.
  */
-export function checkEnvironment(filter: FilterType): boolean {
-    return filter.checkAgainstFilter();
+export async function checkEnvironment(filter: FilterType): Promise<boolean> {
+    return await filter.checkAgainstFilter();
 }
 
 /**

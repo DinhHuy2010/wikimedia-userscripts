@@ -48,7 +48,7 @@ class WikiEntry {
     }
 }
 
-class WikiEntries {
+export class WikiEntries {
     constructor(public wikis: Wikis) {
         this.wikis = wikis;
     }
@@ -59,6 +59,27 @@ class WikiEntries {
             return new WikiEntry(wiki);
         }
         return null;
+    }
+
+    match(pattern: string | string[] | RegExp): WikiEntry[] {
+        return Object.keys(this.wikis).filter(
+            (db) => {
+                if (typeof pattern === "string") {
+                    return db === pattern;
+                } else if (pattern instanceof RegExp) {
+                    return pattern.test(db);
+                } else if (Array.isArray(pattern)) {
+                    return pattern.includes(db);
+                }
+                return false;
+            },
+        ).map((db) => new WikiEntry(this.wikis[db]));
+    }
+
+    getMultilingualWikis(): WikiEntry[] {
+        return Object.keys(this.wikis).filter(
+            (db) => this.wikis[db].edition !== null,
+        ).map((db) => new WikiEntry(this.wikis[db]));
     }
 }
 

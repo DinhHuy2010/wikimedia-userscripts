@@ -7,7 +7,7 @@ export interface FilterType {
      * @description Check if the current wiki's environment is suitable.
      * @returns {boolean} True if the environment is suitable, false otherwise.
      */
-    checkAgainstFilter(): boolean;
+    checkAgainstFilter(): boolean | Promise<boolean>;
 }
 
 export interface WikiDBFilterType extends FilterType {
@@ -20,7 +20,7 @@ export interface WikiDBFilterType extends FilterType {
      * @description Get the list of wikis that match the database wildcard.
      * @returns {string[]} An array of matching wiki names.
      */
-    getWikisThatMatch(): string[];
+    getWikisThatMatch(): Promise<string[]>;
 }
 
 export interface WikiSkinFilterType extends FilterType {

@@ -41,5 +41,12 @@
     "mw-dhscript-users-wikidata-otherprojects-label": "User in other projects",
     "mw-dhscript-users-wikidata-otherprojects-wikidata-item-label": "Wikidata item",
     "mw-dhscript-users-wikidata-otherprojects-wikidata-item-description": "Link to user's linked Wikidata item",
-    "mw-dhscript-users-wikidata-otherprojects-sitelink-description": "Link to user's sitelinked page on $1"
+    "mw-dhscript-users-wikidata-otherprojects-sitelink-description": "Link to user's sitelinked page on $1",
+
+    "mw-dhscript-tasks-execute": "Executing task: $1",
+    "mw-dhscript-tasks-complete": "Task completed: $1",
+    "mw-dhscript-tasks-failed": "Task failed: $1, error: $2",
+    "mw-dhscript-tasks-skip": "Skipping task: $1, reason: $2",
+    "mw-dhscript-tasks-exception": "Task exception at $1, error: $2",
+    "mw-dhscript-tasks-all-complete": "All tasks completed."
 }

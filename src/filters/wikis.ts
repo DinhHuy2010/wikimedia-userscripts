@@ -23,16 +23,6 @@ import {
     WikiSkinFilterType,
 } from "./types.ts";
 
-function getDatabasesSync(): string[] {
-    const s: string[] = [];
-    getWikis().then(
-        (w) => {
-            s.push(...Object.keys(w));
-        },
-    );
-    return s;
-}
-
 /**
  * @description A filter that matches on the wiki running via $wgDBname.
  * @param {string | string[] | RegExp} dbwildcard - The database name(s) or pattern to match against.
@@ -43,16 +33,11 @@ export function validOnWiki(
 ): WikiDBFilterType {
     return {
         dbwildcard,
-        getWikisThatMatch: () => {
-            const dbs = getDatabasesSync();
-            if (typeof dbwildcard === "string") {
-                return dbs.filter((db) => db === dbwildcard);
-            } else if (dbwildcard instanceof RegExp) {
-                return dbs.filter((db) => dbwildcard.test(db));
-            } else if (Array.isArray(dbwildcard)) {
-                return dbs.filter((db) => dbwildcard.includes(db));
-            }
-            return [];
+        getWikisThatMatch: async () => {
+            const dbs = await getWikis();
+            return dbs.match(dbwildcard).map(
+                (wiki) => wiki.db,
+            );
         },
         checkAgainstFilter: () => {
             if (typeof dbwildcard === "string") {
@@ -71,14 +56,11 @@ export function validOnWiki(
  * @description A filter that matches on multlingual wikis.
  * @returns {WikiDBFilterType} A filter that matches on multilingual wikis.
  */
-export function validOnMultilingualWikis(): WikiDBFilterType {
-    return validOnWiki([
-        "mediawikiwiki",
-        "metawiki",
-        "commonswiki",
-        "specieswiki",
-        "wikidatawiki",
-    ]);
+export async function validOnMultilingualWikis(): Promise<WikiDBFilterType> {
+    const wikis = await getWikis();
+    return validOnWiki(
+        wikis.getMultilingualWikis().map((wiki) => wiki.db),
+    );
 }
 
 /**
