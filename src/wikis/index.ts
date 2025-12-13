@@ -3,11 +3,10 @@
 // See CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details
 
 import { getWikis } from "./data.ts";
-import { WikiInfo } from "./types.ts";
 
-export async function getWikiInfo(db: string): Promise<WikiInfo | null> {
+export async function getWikiInfo(db: string) {
     const wikis = await getWikis();
-    return wikis[db] || null;
+    return wikis.get(db);
 }
 
 export { getWikis };

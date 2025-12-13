@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: CC-BY-4.0 OR MIT
 // See CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details
 
-import { Wikis } from "./types.ts";
+import { WikiEntryModel, Wikis } from "./types.ts";
 import { warn } from "../utils.ts";
 import { CACHE_KEY, DATA_URL } from "./constants.ts";
 
@@ -21,14 +21,55 @@ function setCache(blob: string): void {
     mw.storage.set(CACHE_KEY, blob, 86400);
 }
 
-export async function getWikis(): Promise<Wikis> {
+class WikiEntry {
+    constructor(public wiki: WikiEntryModel) {
+        this.wiki = wiki;
+    }
+
+    get db(): string {
+        return this.wiki.db;
+    }
+    get url(): string {
+        return this.wiki.url;
+    }
+    get partOf(): string | null {
+        return this.wiki.edition;
+    }
+    get name(): string {
+        return this.wiki.label;
+    }
+
+    isMultilingual(): boolean {
+        return this.wiki.edition !== null;
+    }
+
+    getAPI(): mw.ForeignApi {
+        return new mw.ForeignApi(`${this.url}w/api.php`);
+    }
+}
+
+class WikiEntries {
+    constructor(public wikis: Wikis) {
+        this.wikis = wikis;
+    }
+
+    get(db: string): WikiEntry | null {
+        const wiki = this.wikis[db];
+        if (wiki) {
+            return new WikiEntry(wiki);
+        }
+        return null;
+    }
+}
+
+export async function getWikis(): Promise<WikiEntries> {
     const cached = getCacheIfPossible();
     if (cached) {
-        return cached;
+        return new WikiEntries(cached);
     }
 
     const response = await fetch(DATA_URL);
     const wikis = await response.json() as Wikis;
     setCache(JSON.stringify(wikis));
-    return wikis;
+    return new WikiEntries(wikis);
 }

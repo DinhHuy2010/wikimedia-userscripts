@@ -1,19 +1,10 @@
-export interface WikiInfo {
-    /**
-     * @description Name of this wiki instance
-     * @type {string}
-     */
-    label: string;
-    /**
-     * @description base site URL
-     * @type {string}
-     */
+export interface WikiEntryModel {
+    db: string;
     url: string;
-    /**
-     * @description The group this wiki belongs to, e.g., "wiki"
-     * @type {string}
-     */
-    group: string;
+    wikidataitem: string;
+    editionwikidataitem: string | null;
+    label: string;
+    edition: string | null;
 }
 
-export type Wikis = Record<string, WikiInfo>;
+export type Wikis = Record<string, WikiEntryModel>;
