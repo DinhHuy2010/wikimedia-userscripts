@@ -13,5 +13,6 @@
     "git.postCommitCommand": "sync",
     "licenser.author": "DinhHuy2010",
     "licenser.license": "Custom",
-    "licenser.customHeader": "From DinhHuy2010/wikimedia-userscripts\nSPDX-License-Identifier: CC-BY-4.0 OR MIT\nSee CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details"
+    "licenser.customHeader": "From DinhHuy2010/wikimedia-userscripts\nSPDX-License-Identifier: CC-BY-4.0 OR MIT\nSee CC-BY-4.0.LICENSE.txt and MIT.LICENSE.txt at the root repository for details",
+    "window.zoomLevel": 3
 }
