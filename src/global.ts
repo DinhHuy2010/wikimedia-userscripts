@@ -11,9 +11,23 @@
 
 import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
-import { loadExternalUserScript } from "./modules/userscript-loader.ts";
 import { log } from "./utils.ts";
 import { initMessages } from "./i18n.ts";
+import { UserScriptRecord } from "./types.ts";
+import { UserScriptTask } from "./modules/userscript.ts";
+
+async function loadExternalUserScript(
+    _dbname: string,
+    name: string,
+    record: UserScriptRecord,
+): Promise<boolean> {
+    const task = new UserScriptTask(name, record.filter, record.script);
+    const suitable = await task.suitableForEnvironment();
+    if (suitable) {
+        await task.execute();
+    }
+    return Promise.resolve(true);
+}
 
 {
     /**
