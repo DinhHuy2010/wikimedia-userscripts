@@ -9,25 +9,11 @@
 
 // deno-lint-ignore-file no-inner-declarations
 
-import { DATABASE_NAME } from "./constants.ts";
 import { dhoptions } from "./options.ts";
 import { log } from "./utils.ts";
 import { initMessages } from "./i18n.ts";
-import { UserScriptRecord } from "./types.ts";
 import { UserScriptTask } from "./modules/userscript.ts";
-
-async function loadExternalUserScript(
-    _dbname: string,
-    name: string,
-    record: UserScriptRecord,
-): Promise<boolean> {
-    const task = new UserScriptTask(name, record.filter, record.script);
-    const suitable = await task.suitableForEnvironment();
-    if (suitable) {
-        await task.execute();
-    }
-    return Promise.resolve(true);
-}
+import { TaskManager } from "./tasks/index.ts";
 
 {
     /**
@@ -36,12 +22,19 @@ async function loadExternalUserScript(
      */
     async function init(): Promise<void> {
         // Initialize i18n messages
-        await initMessages();
-        await Promise.all(
-            Object.entries(dhoptions.scripts).map(([name, record]) => {
-                return loadExternalUserScript(DATABASE_NAME, name, record);
-            }),
+        const manager = new TaskManager();
+        Object.entries(dhoptions.scripts).forEach(
+            ([name, record]) => {
+                const utask = new UserScriptTask(
+                    name,
+                    record.filter,
+                    record.script,
+                );
+                manager.registerTask(utask);
+            },
         );
+        await initMessages();
+        await manager.buildPromise();
         log(mw.msg("mw-dhscript-global-initialized"));
     }
     mw.loader.using([
